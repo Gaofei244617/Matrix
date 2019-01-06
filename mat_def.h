@@ -16,6 +16,8 @@ namespace mat
 {
     class Matrix
     {
+        friend std::tuple<Matrix, int> solve(const Matrix& A, const Matrix& b);
+
     private:
         std::size_t row;                                                           // 行数
         std::size_t column;                                                        // 列数
