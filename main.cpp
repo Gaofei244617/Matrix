@@ -6,7 +6,9 @@
 #include <complex>
 #include <vector>
 #include "matrix.h"
+
 using namespace std;
+using namespace mat;
 
 class Test
 {
@@ -119,8 +121,8 @@ Data2::~Data2()
 /*****************************************************************************/
 void print(Matrix& m)
 {
-    int r = m.size()[0];
-    int c = m.size()[1];
+    int r = std::get<0>(m.size());
+    int c = std::get<1>(m.size());
     for (int i = 0; i < r; i++)
     {
         for (int j = 0; j < c; j++)
