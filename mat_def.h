@@ -16,8 +16,6 @@ namespace mat
 {
     class Matrix
     {
-        friend std::tuple<Matrix, int> solve(const Matrix& A, const Matrix& b);
-
     private:
         std::size_t row;                                                           // 行数
         std::size_t column;                                                        // 列数
@@ -45,8 +43,6 @@ namespace mat
         Matrix& operator/=(const double& num);                                     // M /= num
 
         // 下标索引
-        //double& operator()(std::size_t m, std::size_t n)noexcept;
-        //const double& operator()(std::size_t m, std::size_t n)const noexcept;
         double *const operator[](const std::size_t& n)const noexcept
         {
             return mat_data + n * column;
@@ -54,46 +50,11 @@ namespace mat
         double& at(std::size_t m, std::size_t n);
         const double& at(std::size_t m, std::size_t n)const;
 
-        // 加法运算
-        Matrix operator+()const;                                                   // +M
-        friend Matrix operator+(const Matrix& m1, const Matrix& m2);               // M + M
-        friend Matrix& operator+(const Matrix& m1, Matrix&& m2);                   // M + move(M)
-        friend Matrix& operator+(Matrix&& m1, const Matrix& m2);                   // move(M) + M
-        friend Matrix& operator+(Matrix&& m1, Matrix&& m2);                        // move(M) + move(M)
-        friend Matrix operator+(const Matrix& m, const double& num);               // M + num
-        friend Matrix operator+(const double& num, const Matrix& m);               // num + M
-        friend Matrix& operator+(const double& num, Matrix&& m);                   // num + move(M)
-        friend Matrix& operator+(Matrix&& m, const double& num);                   // move(M) + num
-
-        // 减法运算
-        Matrix operator-()const;                                                   // -M
-        Matrix operator-(const Matrix& m)const;                                    // M - M
-        Matrix& operator-(Matrix&& m)const;                                        // M - move(M)
-        friend Matrix& operator-(Matrix&& m1, const Matrix& m2);                   // move(M) - M
-        friend Matrix& operator-(Matrix&& m1, Matrix&& m2);                        // move(M) - move(M)
-        friend Matrix operator-(const Matrix& m, const double& num);               // M - num
-        friend Matrix operator-(const double& num, const Matrix& m);               // num - M
-        friend Matrix& operator-(const double& num, Matrix&& m);                   // num - move(M)
-        friend Matrix& operator-(Matrix&& m, const double& num);                   // move(M) - num
-
-        // 乘法运算
-        Matrix operator*(const Matrix& m)const;                                    // M * M
-        Matrix operator*(const double& num)const;                                  // M * num
-        friend Matrix& operator*(Matrix&& m, const double& num);                   // move(M) * num
-        friend Matrix& operator*(Matrix&& m1, Matrix&& m2);                        // move(M) * move(M)
-        friend Matrix operator*(const double& num, const Matrix& m);               // num * M
-        friend Matrix& operator*(const double& num, Matrix&& m);                   // num * move(M)
+        // 点乘(除)运算
         Matrix dotMult(const Matrix& m)const;                                      // M .* M
         Matrix& dotMult(Matrix&& m)const;                                          // M .* move(M)
-
-        // 除法运算
-        Matrix operator/(const double& num);                                       // M / num
         Matrix dotDiv(const Matrix& m)const;                                       // M ./ M
         Matrix& dotDiv(Matrix&& m)const;                                           // M ./ move(M)
-
-        // 逻辑运算符
-        bool operator==(const Matrix& m)const noexcept;                            // 等于
-        bool operator!=(const Matrix& m)const noexcept;                            // 不等于
 
         const std::pair<std::size_t, std::size_t> size()const;                     // 获取矩阵行列数
         std::vector<double> getRow(std::size_t n)const;                            // 获取行向量
@@ -126,6 +87,47 @@ namespace mat
         // 全选主元高斯消去法
         static std::tuple<Matrix, std::unique_ptr<std::size_t[]>, std::unique_ptr<std::size_t[]>, std::size_t, Matrix>
             gaussElimination(const Matrix& A, const Matrix& b = Matrix());
+
+        /****************************************** Friend Functions ***************************************************************/
+        friend std::tuple<Matrix, int> solve(const Matrix& A, const Matrix& b);
+
+        // 加法运算
+        friend Matrix operator+(const Matrix& m);                                  // +M
+        friend Matrix operator+(const Matrix& m1, const Matrix& m2);               // M + M
+        friend Matrix& operator+(const Matrix& m1, Matrix&& m2);                   // M + move(M)
+        friend Matrix& operator+(Matrix&& m1, const Matrix& m2);                   // move(M) + M
+        friend Matrix& operator+(Matrix&& m1, Matrix&& m2);                        // move(M) + move(M)
+        friend Matrix operator+(const Matrix& m, const double& num);               // M + num
+        friend Matrix operator+(const double& num, const Matrix& m);               // num + M
+        friend Matrix& operator+(const double& num, Matrix&& m);                   // num + move(M)
+        friend Matrix& operator+(Matrix&& m, const double& num);                   // move(M) + num
+
+        // 减法运算
+        friend Matrix operator-(const Matrix& m);                                  // -M
+        friend Matrix operator-(const Matrix& m1, const Matrix& m2);               // M - M
+        friend Matrix& operator-(const Matrix& m1, Matrix&& m);                    // M - move(M)
+        friend Matrix& operator-(Matrix&& m1, const Matrix& m2);                   // move(M) - M
+        friend Matrix& operator-(Matrix&& m1, Matrix&& m2);                        // move(M) - move(M)
+        friend Matrix operator-(const Matrix& m, const double& num);               // M - num
+        friend Matrix operator-(const double& num, const Matrix& m);               // num - M
+        friend Matrix& operator-(const double& num, Matrix&& m);                   // num - move(M)
+        friend Matrix& operator-(Matrix&& m, const double& num);                   // move(M) - num
+
+        // 乘法运算
+        friend Matrix operator*(const Matrix& m1, const Matrix& m2);               // M * M
+        friend Matrix operator*(const Matrix& m, const double& num);               // M * num
+        friend Matrix& operator*(Matrix&& m, const double& num);                   // move(M) * num
+        friend Matrix& operator*(Matrix&& m1, Matrix&& m2);                        // move(M) * move(M)
+        friend Matrix operator*(const double& num, const Matrix& m);               // num * M
+        friend Matrix& operator*(const double& num, Matrix&& m);                   // num * move(M)
+
+        // 除法运算
+        friend Matrix operator/(const Matrix& m, const double& num);               // M / num
+        friend Matrix& operator/(Matrix&& m, const double& num);                   // move(M) / num
+
+        // 逻辑运算符
+        friend bool operator==(const Matrix& m1, const Matrix& m2)noexcept;        // 等于
+        friend bool operator!=(const Matrix& m1, const Matrix& m2)noexcept;        // 不等于
     };
 }
 

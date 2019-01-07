@@ -119,7 +119,7 @@ Data2::~Data2()
     delete[] Row;
 }
 /*****************************************************************************/
-void print(Matrix& m)
+void print(const Matrix& m)
 {
     int r = std::get<0>(m.size());
     int c = std::get<1>(m.size());
@@ -146,32 +146,33 @@ int main()
     //m3[3][4] = 1;
     //auto a = m.eigs();
 
-    //Matrix matrix = { {1,10,3,6,7},{-100,5,4,1,9},{2,0,3,1,1},{4,4,9,2,0},{1,5,2,3,4} };
-    //Matrix b = Matrix({ 1,2,3,4,5 }).trans();
+    Matrix matrix = { {1,10,3,6,7},{-100,5,4,1,9},{2,0,3,1,1},{4,4,9,2,0},{1,5,2,3,4} };
+    Matrix b = Matrix({ 1,2,3,4,5 }).trans();
     //Matrix matrix = { {3,4},{6,7},{6,8} };
     //Matrix b = Matrix({ 1,3,2 }).trans();
 
     //Matrix matrix = { { 3,4,5 } };
     //Matrix b = Matrix({ 7 }).trans();
 
-    //cout << "The matrix is:" << endl;
-    //print(matrix);
-    //cout << endl;
-    //cout << "The b is:" << endl;
-    //print(b);
-    //cout << endl;
-    //cout << "The solution is:" << endl;
-    //print(get<0>(Matrix::solve(matrix, b)));
-    //cout << get<1>(Matrix::solve(matrix, b));
-    //cout << endl;
+    cout << "The matrix is:" << endl;
+    print(matrix);
+    cout << endl;
+    cout << "The b is:" << endl;
+    print(b);
+    cout << endl;
+    cout << "The solution is:" << endl;
+    print(std::get<0>(solve(matrix, b)));
+    //cout << std::get<1>(solve(matrix, b));
+    cout << endl;
 
     //cout << "Rank = " << matrix.rank() << endl << endl;
     //cout << "After gauss elimination:" << endl;
     //auto temp = Matrix::gaussElimination(matrix);
     //print(get<0>(temp));
     //cout << endl;
-    Matrix m = { { 1,2 },{ 3,4 } };
-    cout << m.det() << endl;
+
+    //Matrix m = { { 1,2 },{ 3,4 } };
+    //cout << m.det() << endl;
 
     system("pause");
 }

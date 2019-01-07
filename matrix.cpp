@@ -242,7 +242,7 @@ namespace mat
             Matrix x(n, 1);   // 方程的解
 
             // 求解高斯消元后的上三角方程组
-            for (std::size_t i = rankA - 1; i >= 0; i--)
+            for (int i = rankA - 1; i >= 0; i--)
             {
                 for (std::size_t j = 0; j < rankA - i - 1; j++)
                 {
@@ -263,7 +263,7 @@ namespace mat
 
             // 依据列交换信息,恢复向量x中元素的顺序
             auto temp = x[rankA - 1][0];
-            for (std::size_t i = rankA - 1; i >= 0; i--)
+            for (int i = rankA - 1; i >= 0; i--)
             {
                 if (C[i] != i)
                 {
@@ -294,5 +294,416 @@ namespace mat
         }
 
         return std::make_tuple(Matrix(), 2);
+    }
+
+    // 加法运算
+    Matrix operator+(const Matrix& m)
+    {
+        return m;
+    }
+    Matrix operator+(const Matrix& m1, const Matrix& m2)
+    {
+        if (m1.row == m2.row && m1.column == m2.column)
+        {
+            std::size_t size = m1.row * m1.column;
+            Matrix matrix(m1.row, m1.column);
+            for (std::size_t i = 0; i < size; i++)
+            {
+                matrix.mat_data[i] = m1.mat_data[i] + m2.mat_data[i];
+            }
+            return matrix;
+        }
+        else
+        {
+            throw std::length_error("Dimensions do not match.");
+        }
+        return m1;
+    }
+    Matrix& operator+(const Matrix& m1, Matrix&& m2)
+    {
+        if (m1.row == m2.row && m1.column == m2.column)
+        {
+            std::size_t size = m1.row * m1.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                m2.mat_data[i] += m1.mat_data[i];
+            }
+            return m2;
+        }
+        else
+        {
+            throw std::length_error("Dimensions do not match.");
+        }
+        return m2 = m1;
+    }
+    Matrix operator+(const Matrix& m, const double& num)
+    {
+        if (m.row > 0)
+        {
+            Matrix matrix(m.row, m.column);
+            std::size_t size = m.row * m.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                matrix.mat_data[i] = m.mat_data[i] + num;
+            }
+            return matrix;
+        }
+        else
+        {
+            throw std::length_error("Null Matrix.");
+        }
+        return m;
+    }
+    Matrix& operator+(Matrix&& m1, const Matrix& m2)
+    {
+        if (m1.row == m2.row && m1.column == m2.column)
+        {
+            std::size_t size = m1.row * m1.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                m1.mat_data[i] += m2.mat_data[i];
+            }
+        }
+        else
+        {
+            throw std::length_error("Dimensions do not match.");
+        }
+        return m1;
+    }
+    Matrix& operator+(Matrix&& m1, Matrix&& m2)
+    {
+        return std::move(m1) + m2;
+    }
+    Matrix operator+(const double& num, const Matrix& m)
+    {
+        if (m.row > 0)
+        {
+            Matrix matrix(m.row, m.column);
+            std::size_t size = m.row * m.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                matrix.mat_data[i] = m.mat_data[i] + num;
+            }
+            return matrix;
+        }
+        else
+        {
+            throw std::length_error("Dimensions do not match.");
+        }
+        return Matrix();
+    }
+    Matrix& operator+(const double& num, Matrix&& m)
+    {
+        if (m.row > 0)
+        {
+            std::size_t size = m.row * m.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                m.mat_data[i] += num;
+            }
+        }
+        else
+        {
+            throw std::length_error("Dimensions do not match.");
+        }
+        return m;
+    }
+    Matrix& operator+(Matrix&& m, const double& num)
+    {
+        if (m.row > 0)
+        {
+            std::size_t size = m.row * m.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                m.mat_data[i] += num;
+            }
+        }
+        else
+        {
+            throw std::length_error("Null Matrix.");
+        }
+        return m;
+    }
+
+    // 减法运算
+    Matrix operator-(const Matrix& m)
+    {
+        Matrix matrix(m.row, m.column);
+        std::size_t size = m.row * m.column;
+        for (std::size_t i = 0; i < size; i++)
+        {
+            matrix.mat_data[i] = -(m.mat_data[i]);
+        }
+        return matrix;
+    }
+    Matrix operator-(const Matrix& m1, const Matrix& m2)
+    {
+        if (m1.row == m2.row && m1.column == m2.column)
+        {
+            std::size_t size = m1.row * m1.column;
+            Matrix matrix(m1.row, m1.column);
+            for (std::size_t i = 0; i < size; i++)
+            {
+                matrix.mat_data[i] = m1.mat_data[i] - m2.mat_data[i];
+            }
+            return matrix;
+        }
+        else
+        {
+            throw std::length_error("Dimensions do not match.");
+        }
+        return m1;
+    }
+    Matrix& operator-(const Matrix& m1, Matrix&& m2)
+    {
+        if (m1.row == m2.row && m1.column == m2.column)
+        {
+            std::size_t size = m1.row * m1.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                m2.mat_data[i] = m1.mat_data[i] - m2.mat_data[i];
+            }
+            return m2;
+        }
+        else
+        {
+            throw std::length_error("Dimensions do not match.");
+        }
+        return m2 = m1;
+    }
+    Matrix operator-(const Matrix& m, const double& num)
+    {
+        if (m.row > 0)
+        {
+            Matrix matrix(m.row, m.column);
+            std::size_t size = m.row * m.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                matrix.mat_data[i] = m.mat_data[i] - num;
+            }
+            return matrix;
+        }
+        else
+        {
+            throw std::length_error("Null Matrix.");
+        }
+        return m;
+    }
+    Matrix& operator-(Matrix&& m1, const Matrix& m2)
+    {
+        if (m1.row == m2.row && m1.column == m2.column)
+        {
+            std::size_t size = m1.row * m1.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                m1.mat_data[i] -= m2.mat_data[i];
+            }
+        }
+        else
+        {
+            throw std::length_error("Dimensions do not match.");
+        }
+        return m1;
+    }
+    Matrix& operator-(Matrix&& m1, Matrix&& m2)
+    {
+        return std::move(m1) - m2;
+    }
+    Matrix operator-(const double& num, const Matrix& m)
+    {
+        if (m.row > 0)
+        {
+            Matrix matrix(m.row, m.column);
+            std::size_t size = m.row * m.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                matrix.mat_data[i] = num - m.mat_data[i];
+            }
+            return matrix;
+        }
+        else
+        {
+            throw std::length_error("Dimensions do not match.");
+        }
+        return Matrix();
+    }
+    Matrix& operator-(const double& num, Matrix&& m)
+    {
+        if (m.row > 0)
+        {
+            std::size_t size = m.row * m.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                m.mat_data[i] = num - m.mat_data[i];
+            }
+        }
+        else
+        {
+            throw std::length_error("Dimensions do not match.");
+        }
+        return m;
+    }
+    Matrix& operator-(Matrix&& m, const double& num)
+    {
+        if (m.row > 0)
+        {
+            std::size_t size = m.row * m.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                m.mat_data[i] -= num;
+            }
+        }
+        else
+        {
+            throw std::length_error("Null Matrix.");
+        }
+        return m;
+    }
+
+    // 乘法运算
+    Matrix operator*(const Matrix& m1, const Matrix& m2)
+    {
+        if (std::get<1>(m1.size()) == std::get<0>(m2.size()))
+        {
+            std::size_t row = std::get<0>(m1.size());
+            std::size_t column = std::get<1>(m2.size());
+            Matrix matrix(row, column);
+
+            std::size_t count = std::get<0>(m2.size());
+            for (std::size_t i = 0; i < row; i++)
+            {
+                for (std::size_t j = 0; j < column; j++)
+                {
+                    double sum = 0;
+                    for (std::size_t k = 0; k < count; k++)
+                    {
+                        sum += m1[i][k] * m2[k][j];
+                    }
+                    matrix[i][j] = sum;
+                }
+            }
+            return matrix;
+        }
+        else
+        {
+            throw std::length_error("Dimensions does not match.");
+        }
+        return Matrix();
+    }
+    Matrix operator*(const Matrix& m, const double& num)
+    {
+        Matrix matrix(m.row, m.column);
+        std::size_t size = m.row * m.column;
+        for (std::size_t i = 0; i < size; i++)
+        {
+            matrix.mat_data[i] = m.mat_data[i] * num;
+        }
+        return matrix;
+    }
+    Matrix& operator*(Matrix&& m, const double& num)
+    {
+        std::size_t size = m.row * m.column;
+        for (std::size_t i = 0; i < size; i++)
+        {
+            m.mat_data[i] *= num;
+        }
+        return m;
+    }
+    Matrix& operator*(Matrix&& m1, Matrix&& m2)
+    {
+        return m1 = std::move(m1) * m2;
+    }
+    Matrix operator*(const double& num, const Matrix& m)
+    {
+        Matrix matrix(m.row, m.column);
+        std::size_t size = m.row * m.column;
+        for (std::size_t i = 0; i < size; i++)
+        {
+            matrix.mat_data[i] = num * m.mat_data[i];
+        }
+        return matrix;
+    }
+    Matrix& operator*(const double& num, Matrix&& m)
+    {
+        std::size_t size = m.row * m.column;
+        for (std::size_t i = 0; i < size; i++)
+        {
+            m.mat_data[i] *= num;
+        }
+        return m;
+    }
+
+    // 除法运算
+    Matrix operator/(const Matrix& m, const double& num)
+    {
+        if (m.row > 0)
+        {
+            if (num != 0)
+            {
+                Matrix matrix(m.row, m.column);
+                std::size_t size = m.row * m.column;
+                for (std::size_t i = 0; i < size; i++)
+                {
+                    matrix.mat_data[i] = m.mat_data[i] / num;
+                }
+                return matrix;
+            }
+            else
+            {
+                throw std::invalid_argument("Error of Inf.");
+            }
+        }
+        else
+        {
+            throw std::length_error("Null Matrix.");
+        }
+        return m;
+    }
+    Matrix& operator/(Matrix&& m, const double& num)
+    {
+        if (m.row > 0)
+        {
+            if (num != 0)
+            {
+                std::size_t size = m.row * m.column;
+                for (std::size_t i = 0; i < size; i++)
+                {
+                    m.mat_data[i] /= num;
+                }
+            }
+            else
+            {
+                throw std::invalid_argument("Error of Inf.");
+            }
+        }
+        else
+        {
+            throw std::length_error("Null Matrix.");
+        }
+        return m;
+    }
+
+    // 逻辑运算
+    bool operator==(const Matrix& m1, const Matrix& m2)noexcept
+    {
+        if (m1.row == m2.row && m1.column == m2.column)
+        {
+            bool flag = true;
+            std::size_t size = m1.row * m1.column;
+            for (std::size_t i = 0; i < size; i++)
+            {
+                if (m1.mat_data[i] != m2.mat_data[i])
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            return flag;
+        }
+        return false;
+    }
+    bool operator!=(const Matrix& m1, const Matrix& m2)noexcept
+    {
+        return !(m1 == m2);
     }
 }
