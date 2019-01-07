@@ -45,10 +45,10 @@ namespace mat
         Matrix& operator/=(const double& num);
 
         // 下标索引
-        inline double& operator()(std::size_t m, std::size_t n)noexcept;
-        inline const double& operator()(std::size_t m, std::size_t n)const noexcept;
-        inline double& at(std::size_t m, std::size_t n);
-        inline const double& at(std::size_t m, std::size_t n)const;
+        double& operator()(std::size_t m, std::size_t n)noexcept;
+        const double& operator()(std::size_t m, std::size_t n)const noexcept;
+        double& at(std::size_t m, std::size_t n);
+        const double& at(std::size_t m, std::size_t n)const;
 
         // 加法运算
         Matrix operator+()const;                                                   // +M
