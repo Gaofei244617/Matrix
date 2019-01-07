@@ -127,7 +127,7 @@ void print(Matrix& m)
     {
         for (int j = 0; j < c; j++)
         {
-            cout << m(i, j) << "\t";
+            cout << m[i][j] << "\t";
         }
         cout << endl;
     }
@@ -142,8 +142,8 @@ int main()
     ////DWORD start = GetTickCount();
     ////DWORD end = GetTickCount();
     ////cout << "The run time is:" << (end - start) << " ms" << endl;
-    //m3(4, 3) = 2;
-    //m3(3, 4) = 1;
+    //m3[4][3] = 2;
+    //m3[3][4] = 1;
     //auto a = m.eigs();
 
     //Matrix matrix = { {1,10,3,6,7},{-100,5,4,1,9},{2,0,3,1,1},{4,4,9,2,0},{1,5,2,3,4} };

@@ -7,16 +7,12 @@ namespace mat
     Matrix::Matrix() : row(0), column(0), mat_data(nullptr) {}
     Matrix::Matrix(const std::size_t& m, const std::size_t& n) : row(0), column(0), mat_data(nullptr)
     {
-        if (m*n == 0)
-        {
-            mat_data = nullptr;
-        }
-        else
+        if (m > 0 && n > 0)
         {
             mat_data = new double[m*n]();
+            row = m;
+            column = n;
         }
-        row = m;
-        column = n;
     }
     Matrix::Matrix(const std::initializer_list<double>& m) : row(0), column(0), mat_data(nullptr)
     {
@@ -79,7 +75,9 @@ namespace mat
 
         std::size_t size = row * column;
         for (std::size_t i = 0; i < size; i++)
+        {
             mat_data[i] = other.mat_data[i];
+        }
     }
 
     // 移动构造
@@ -98,16 +96,8 @@ namespace mat
         delete[] mat_data;
     }
 
-    // 重载运算符(),用于获取矩阵元素和赋值,索引从0开始
-    inline double& Matrix::operator()(std::size_t m, std::size_t n)noexcept
-    {
-        return mat_data[column*m + n];
-    }
-    inline const double& Matrix::operator()(std::size_t m, std::size_t n)const noexcept
-    {
-        return mat_data[column*m + n];
-    }
-    inline double& Matrix::at(std::size_t m, std::size_t n)
+    // 元素索引
+    double& Matrix::at(std::size_t m, std::size_t n)
     {
         if (m < row && n < column)
         {
@@ -118,7 +108,7 @@ namespace mat
             throw std::out_of_range("In function at():Out of index range of the matrix.");
         }
     }
-    inline const double& Matrix::at(std::size_t m, std::size_t n)const
+    const double& Matrix::at(std::size_t m, std::size_t n)const
     {
         if (m < row && n < column)
         {
@@ -256,9 +246,9 @@ namespace mat
                     double sum = 0;
                     for (std::size_t k = 0; k < count; k++)
                     {
-                        sum += (*this)(i, k) * m(k, j);
+                        sum += (*this)[i][k] * m[k][j];
                     }
-                    matrix(i, j) = sum;
+                    matrix[i][j] = sum;
                 }
             }
             *this = std::move(matrix);
@@ -574,9 +564,9 @@ namespace mat
                     double sum = 0;
                     for (std::size_t k = 0; k < count; k++)
                     {
-                        sum += (*this)(i, k) * m(k, j);
+                        sum += (*this)[i][k] * m[k][j];
                     }
-                    matrix(i, j) = sum;
+                    matrix[i][j] = sum;
                 }
             }
             return matrix;
@@ -1033,7 +1023,7 @@ namespace mat
                 bool zero = true;
                 for (std::size_t i = r + 1; i < n; i++)
                 {
-                    if (A(i, r) != 0)
+                    if (A[i][r] != 0)
                     {
                         zero = false;
                         break;
@@ -1046,21 +1036,21 @@ namespace mat
                     d_r = 0;
                     for (std::size_t i = r; i < n; i++)
                     {
-                        d_r += A(i, r) * A(i, r);
+                        d_r += A[i][r] * A[i][r];
                     }
                     d_r = sqrt(d_r);
 
                     // 计算c_r
-                    c_r = -sgn(A(r, r)) * d_r;
+                    c_r = -sgn(A[r][r]) * d_r;
                     // 计算h_r
-                    h_r = c_r * (c_r - A(r, r));
+                    h_r = c_r * (c_r - A[r][r]);
                     // 计算向量u_r
                     for (std::size_t i = 0; i < n; i++)
                     {
                         if (i < r)
                             u_r[i] = 0;
                         else
-                            u_r[i] = A(i, r);
+                            u_r[i] = A[i][r];
                     }
                     u_r[r] -= c_r;
 
@@ -1078,7 +1068,7 @@ namespace mat
                     // 消除上三角阵R主对角线以下元素的截断误差
                     for (std::size_t i = r + 1; i < n; i++)
                     {
-                        A(i, r) = 0;
+                        A[i][r] = 0;
                     }
                 }
             }
@@ -1116,20 +1106,20 @@ namespace mat
         {
             if (m == 1)
             {
-                vec.emplace_back(matrix(0, 0), 0);
+                vec.emplace_back(matrix[0][0], 0);
                 break;
             }
 
-            if (abs(matrix(m - 1, m - 2)) < e)
+            if (abs(matrix[m - 1][m - 2]) < e)
             {
-                vec.emplace_back(matrix(m - 1, m - 1), 0);
+                vec.emplace_back(matrix[m - 1][m - 1], 0);
                 m = m - 1;
             }
             else
             {
-                if (m == 2 || abs(matrix(m - 2, m - 3)) < e)
+                if (m == 2 || abs(matrix[m - 2][m - 3]) < e)
                 {
-                    auto val = eigVal22(matrix(m - 2, m - 2), matrix(m - 2, m - 1), matrix(m - 1, m - 2), matrix(m - 1, m - 1));
+                    auto val = eigVal22(matrix[m - 2][m - 2], matrix[m - 2][m - 1], matrix[m - 1][m - 2], matrix[m - 1][m - 1]);
                     vec.push_back(val[0]);
                     vec.push_back(val[1]);
                     if (m == 2)
@@ -1448,7 +1438,7 @@ namespace mat
                 bool zero = true;
                 for (std::size_t i = r + 2; i < n; i++)
                 {
-                    if (A(i, r) != 0)
+                    if (A[i][r] != 0)
                     {
                         zero = false;
                         break;
@@ -1461,21 +1451,21 @@ namespace mat
                     d_r = 0;
                     for (std::size_t i = r + 1; i < n; i++)
                     {
-                        d_r += A(i, r) * A(i, r);
+                        d_r += A[i][r] * A[i][r];
                     }
                     d_r = sqrt(d_r);
 
                     // 计算c_r
-                    c_r = -sgn(A(r + 1, r)) * d_r;
+                    c_r = -sgn(A[r + 1][r]) * d_r;
                     // 计算h_r
-                    h_r = c_r * (c_r - A(r + 1, r));
+                    h_r = c_r * (c_r - A[r + 1][r]);
                     // 计算向量u_r
                     for (std::size_t i = 0; i < n; i++)
                     {
                         if (i < r + 1)
                             u_r[i] = 0;
                         else
-                            u_r[i] = A(i, r);
+                            u_r[i] = A[i][r];
                     }
                     u_r[r + 1] -= c_r;
 
@@ -1488,14 +1478,14 @@ namespace mat
                     //Q -= Q * U_R * U_R.trans() / h_r;
                     P_R = A.trans() * U_R / h_r;
                     Q_R = A * U_R / h_r;
-                    t_r = (P_R.trans()*U_R / h_r)(0, 0);
+                    t_r = (P_R.trans()*U_R / h_r)[0][0];
                     A -= (Q_R - t_r * U_R)*U_R.trans() + U_R * P_R.trans();
                     U_R.mat_data = nullptr;
 
                     // 消除上三角阵R主对角线以下元素的截断误差
                     for (std::size_t i = r + 2; i < n; i++)
                     {
-                        A(i, r) = 0;
+                        A[i][r] = 0;
                     }
                 }
             }
@@ -1540,8 +1530,8 @@ namespace mat
             throw std::length_error("The matrix dimension should be larger than 2.");
             return A;
         }
-        double s = A(m - 2, m - 2) + A(m - 1, m - 1);
-        double t = A(m - 2, m - 2) * A(m - 1, m - 1) - A(m - 2, m - 1) * A(m - 1, m - 2);
+        double s = A[m - 2][m - 2] + A[m - 1][m - 1];
+        double t = A[m - 2][m - 2] * A[m - 1][m - 1] - A[m - 2][m - 1] * A[m - 1][m - 2];
         Matrix M = A * A - s * A + t * eye(A.row, A.row);
         Matrix& B = M;
 
@@ -1563,7 +1553,7 @@ namespace mat
             bool zero = true;
             for (std::size_t i = r + 1; i < m; i++)
             {
-                if (B(i, r) != 0)
+                if (B[i][r] != 0)
                 {
                     zero = false;
                     break;
@@ -1576,21 +1566,21 @@ namespace mat
                 d_r = 0;
                 for (std::size_t i = r; i < m; i++)
                 {
-                    d_r += B(i, r) * B(i, r);
+                    d_r += B[i][r] * B[i][r];
                 }
                 d_r = sqrt(d_r);
 
                 // 计算c_r
-                c_r = -sgn(B(r, r)) * d_r;
+                c_r = -sgn(B[r][r]) * d_r;
                 // 计算h_r
-                h_r = c_r * (c_r - B(r, r));
+                h_r = c_r * (c_r - B[r][r]);
                 // 计算向量u_r
                 for (std::size_t i = 0; i < m; i++)
                 {
                     if (i < r)
                         u_r[i] = 0;
                     else
-                        u_r[i] = B(i, r);
+                        u_r[i] = B[i][r];
                 }
                 u_r[r] -= c_r;
 
@@ -1612,19 +1602,4 @@ namespace mat
         delete[] u_r;
         return A;
     }
-
-    //void Matrix::print()const
-    //{
-    //  int r = this->row;
-    //  int c = this->column;
-    //  for (int i = 0; i < r; i++)
-    //  {
-    //      for (int j = 0; j < c; j++)
-    //      {
-    //          std::cout << mat_data[i*c + j] << "\t";
-    //      }
-    //      std::cout << std::endl;
-    //  }
-    //  std::cout << std::endl;
-    //}
 }

@@ -34,20 +34,23 @@ namespace mat
         virtual ~Matrix();                                                         // 析构函数
 
         // 赋值运算
-        Matrix& operator=(const Matrix& other)noexcept;
-        Matrix& operator=(Matrix&& other)noexcept;                                 // 移动赋值
+        Matrix& operator=(const Matrix& other)noexcept;                            // M1 = M2
+        Matrix& operator=(Matrix&& other)noexcept;                                 // M1 = move(M2)
         Matrix& operator+=(const double& num);                                     // M += num
         Matrix& operator+=(const Matrix& m);                                       // M += M
         Matrix& operator-=(const double& num);                                     // M -= num
         Matrix& operator-=(const Matrix& m);                                       // M -= M
         Matrix& operator*=(const double& num);                                     // M *= num
         Matrix& operator*=(const Matrix& m);                                       // M *= M
-        Matrix& operator/=(const double& num);
+        Matrix& operator/=(const double& num);                                     // M /= num
 
         // 下标索引
-        double& operator()(std::size_t m, std::size_t n)noexcept;
-        const double& operator()(std::size_t m, std::size_t n)const noexcept;
-        double *const operator[](const std::size_t& n)noexcept;
+        //double& operator()(std::size_t m, std::size_t n)noexcept;
+        //const double& operator()(std::size_t m, std::size_t n)const noexcept;
+        double *const operator[](const std::size_t& n)const noexcept
+        {
+            return mat_data + n * column;
+        }
         double& at(std::size_t m, std::size_t n);
         const double& at(std::size_t m, std::size_t n)const;
 
@@ -105,6 +108,7 @@ namespace mat
         Matrix inv()const;                                                         // 逆矩阵
         double det()const;                                                         // 矩阵行列式
         std::vector<Matrix> QR()const;                                             // 矩阵QR分解
+        std::vector<Matrix> LU()const;                                             // 矩阵LU分解
         std::vector<std::complex<double>> eigs(double e = 0)const;                 // 矩阵特征值
         std::vector<Matrix> SVD()const;                                            // 奇异值分解，返回S、V、D三个矩阵
         Matrix subMat(std::size_t r1, std::size_t c1, std::size_t r2, std::size_t c2)const;     // 子阵
@@ -122,8 +126,6 @@ namespace mat
         // 全选主元高斯消去法
         static std::tuple<Matrix, std::unique_ptr<std::size_t[]>, std::unique_ptr<std::size_t[]>, std::size_t, Matrix>
             gaussElimination(const Matrix& A, const Matrix& b = Matrix());
-
-        //void print()const;
     };
 }
 

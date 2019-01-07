@@ -3,67 +3,67 @@
 namespace mat
 {
     // 获取矩阵行列数
-    inline const std::pair<std::size_t, std::size_t> size(const Matrix& mat)
+    const std::pair<std::size_t, std::size_t> size(const Matrix& mat)
     {
         return mat.size();
     }
 
     // 获取对角元素
-    inline std::vector<double> getDiag(const Matrix& mat)
+    std::vector<double> getDiag(const Matrix& mat)
     {
         return mat.getDiag();
     }
 
     // 1范数,列和范数
-    inline double normOne(const Matrix& mat)
+    double normOne(const Matrix& mat)
     {
         return mat.normOne();
     }
 
     // 无穷范数,行和范数
-    inline double normInf(const Matrix& mat)
+    double normInf(const Matrix& mat)
     {
         return mat.normInf();
     }
 
     // 矩阵转置
-    inline Matrix trans(const Matrix& mat)
+    Matrix trans(const Matrix& mat)
     {
         return mat.trans();
     }
 
     // 矩阵的秩
-    inline std::size_t rank(const Matrix& mat)
+    std::size_t rank(const Matrix& mat)
     {
         return mat.rank();
     }
 
     // 矩阵的迹
-    inline double trace(const Matrix& mat)
+    double trace(const Matrix& mat)
     {
         return mat.trace();
     }
 
     // 逆矩阵
-    inline Matrix inv(const Matrix& mat)
+    Matrix inv(const Matrix& mat)
     {
         return mat.inv();
     }
 
     // 矩阵行列式
-    inline double det(const Matrix& mat)
+    double det(const Matrix& mat)
     {
         return mat.det();
     }
 
     // 矩阵QR分解
-    inline std::vector<Matrix> QR(const Matrix& mat)
+    std::vector<Matrix> QR(const Matrix& mat)
     {
         return mat.QR();
     }
 
     // 矩阵特征值
-    inline std::vector<std::complex<double>> eigs(const Matrix& mat, double e)
+    std::vector<std::complex<double>> eigs(const Matrix& mat, double e)
     {
         return mat.eigs(e);
     }
@@ -76,7 +76,7 @@ namespace mat
         m < n ? size = m : size = n;
         for (std::size_t i = 0; i < size; i++)
         {
-            matrix(i, i) = 1;
+            matrix[i][i] = 1;
         }
         return matrix;
     }
@@ -94,7 +94,7 @@ namespace mat
         Matrix matrix(size, size);
         for (std::size_t i = 0; i < size; i++)
         {
-            matrix(i, i) = *(nums.begin() + i);
+            matrix[i][i] = *(nums.begin() + i);
         }
         return matrix;
     }
@@ -141,16 +141,13 @@ namespace mat
                 {
                     for (std::size_t k = 0; k < column; k++)
                     {
-                        matrix(j + p, k) = (*(M.begin() + i))(j, k);
+                        matrix[j + p][k] = (*(M.begin() + i))[j][k];
                     }
                 }
-
                 p += temp_row;
             }
-
             return matrix;
         }
-
         return Matrix();
     }
 
@@ -194,7 +191,7 @@ namespace mat
                 {
                     for (std::size_t k = 0; k < temp_column; k++)
                     {
-                        matrix(j, k + p) = (*(M.begin() + i))(j, k);
+                        matrix[j][k + p] = (*(M.begin() + i))[j][k];
                     }
                 }
 
@@ -249,10 +246,10 @@ namespace mat
             {
                 for (std::size_t j = 0; j < rankA - i - 1; j++)
                 {
-                    vec(i, 0) -= matrix(i, rankA - 1 - j) * x(rankA - 1 - j, 0);
+                    vec[i][0] -= matrix[i][rankA - 1 - j] * x[rankA - 1 - j][0];
                 }
 
-                x(i, 0) = 1.0 * vec(i, 0) / matrix(i, i);
+                x[i][0] = 1.0 * vec[i][0] / matrix[i][i];
             }
 
             // 方程有无穷多个解时，另解向量x部分元素为0，得到一个特解
@@ -260,19 +257,19 @@ namespace mat
             {
                 for (std::size_t i = rankA; i < n; i++)
                 {
-                    x(i, 0) = 0;
+                    x[i][0] = 0;
                 }
             }
 
             // 依据列交换信息,恢复向量x中元素的顺序
-            auto temp = x(rankA - 1, 0);
+            auto temp = x[rankA - 1][0];
             for (std::size_t i = rankA - 1; i >= 0; i--)
             {
                 if (C[i] != i)
                 {
-                    temp = x(i, 0);
-                    x(i, 0) = x(C[i], 0);
-                    x(C[i], 0) = temp;
+                    temp = x[i][0];
+                    x[i][0] = x[C[i]][0];
+                    x[C[i]][0] = temp;
                 }
             }
 
