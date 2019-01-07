@@ -47,6 +47,7 @@ namespace mat
         // 下标索引
         double& operator()(std::size_t m, std::size_t n)noexcept;
         const double& operator()(std::size_t m, std::size_t n)const noexcept;
+        double *const operator[](const std::size_t& n)noexcept;
         double& at(std::size_t m, std::size_t n);
         const double& at(std::size_t m, std::size_t n)const;
 
