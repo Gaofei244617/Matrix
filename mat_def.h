@@ -2,8 +2,6 @@
 #ifndef _MAT_DEF_H_
 #define _MAT_DEF_H_
 
-//#include <iostream>
-
 #include <string>
 #include <vector>
 #include <tuple>
@@ -14,6 +12,8 @@
 
 namespace mat
 {
+    using usize = std::size_t;
+
     class Matrix
     {
     private:
@@ -57,8 +57,8 @@ namespace mat
         Matrix& dotDiv(Matrix&& m)const;                                           // M ./ move(M)
 
         const std::pair<std::size_t, std::size_t> size()const;                     // 获取矩阵行列数
-        std::vector<double> getRow(std::size_t n)const;                            // 获取行向量
-        std::vector<double> getColumn(std::size_t n)const;                         // 获取列向量
+        Matrix getRow(std::size_t n)const;                                         // 获取行向量
+        Matrix getColumn(std::size_t n)const;                                      // 获取列向量
         std::vector<double> getDiag()const;                                        // 获取对角元素
         double normOne()const;                                                     // 1范数,列和范数
         double normInf()const;                                                     // 无穷范数,行和范数
@@ -68,10 +68,10 @@ namespace mat
         double trace()const;                                                       // 矩阵的迹
         Matrix inv()const;                                                         // 逆矩阵
         double det()const;                                                         // 矩阵行列式
-        std::vector<Matrix> QR()const;                                             // 矩阵QR分解
-        std::vector<Matrix> LU()const;                                             // 矩阵LU分解
+        std::pair<Matrix, Matrix> QR()const;                                       // 矩阵QR分解
+        std::pair<Matrix, Matrix> LU()const;                                       // 矩阵LU分解
         std::vector<std::complex<double>> eigs(double e = 0)const;                 // 矩阵特征值
-        std::vector<Matrix> SVD()const;                                            // 奇异值分解，返回S、V、D三个矩阵
+        std::tuple<Matrix, Matrix, Matrix> SVD()const;                             // 奇异值分解，返回S、V、D三个矩阵
         Matrix subMat(std::size_t r1, std::size_t c1, std::size_t r2, std::size_t c2)const;     // 子阵
 
     private:
@@ -89,7 +89,7 @@ namespace mat
             gaussElimination(const Matrix& A, const Matrix& b = Matrix());
 
         /****************************************** Friend Functions ***************************************************************/
-        friend std::tuple<Matrix, int> solve(const Matrix& A, const Matrix& b);
+        friend std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b);
 
         // 加法运算
         friend Matrix operator+(const Matrix& m);                                  // +M

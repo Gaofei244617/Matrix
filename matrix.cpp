@@ -8,6 +8,18 @@ namespace mat
         return mat.size();
     }
 
+    // 获取行向量
+    Matrix getRow(const Matrix& mat, std::size_t n)
+    {
+        return mat.getRow(n);
+    }
+
+    // 获取列向量
+    Matrix getColumn(const Matrix& mat, std::size_t n)
+    {
+        return mat.getColumn(n);
+    }
+
     // 获取对角元素
     std::vector<double> getDiag(const Matrix& mat)
     {
@@ -57,7 +69,7 @@ namespace mat
     }
 
     // 矩阵QR分解
-    std::vector<Matrix> QR(const Matrix& mat)
+    std::pair<Matrix, Matrix> QR(const Matrix& mat)
     {
         return mat.QR();
     }
@@ -204,7 +216,7 @@ namespace mat
     }
 
     // 求解线性方程组: Ax = b
-    std::tuple<Matrix, int> solve(const Matrix& A, const Matrix& b)
+    std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b)
     {
         /*******************************************************/
         // 求解线性方程组: Ax = b
@@ -276,13 +288,13 @@ namespace mat
             // (1.1) 方程有唯一解
             if (rankA == n)
             {
-                return std::make_tuple(x, 0);
+                return std::make_pair(x, 0);
             }
 
             // (1.2) 方程有无穷多个解
             if (rankA < n)
             {
-                return std::make_tuple(x, 1);
+                return std::make_pair(x, 1);
             }
         }
 
@@ -290,10 +302,10 @@ namespace mat
         if (rankA != rankAb)
         {
             Matrix AT(A.trans());
-            return std::make_tuple(std::get<0>(solve(AT*A, AT*b)), 2);
+            return std::make_pair(std::get<0>(solve(AT*A, AT*b)), 2);
         }
 
-        return std::make_tuple(Matrix(), 2);
+        return std::make_pair(Matrix(), 2);
     }
 
     // 加法运算

@@ -394,44 +394,33 @@ namespace mat
     }
 
     // 获取行向量
-    std::vector<double> Matrix::getRow(std::size_t n)const
+    Matrix Matrix::getRow(std::size_t n)const
     {
         if (this->row > 0)
         {
-            std::vector<double> vec;
+            Matrix vec(1, this->column);
             for (std::size_t i = 0; i < this->column; i++)
             {
-                vec.emplace_back(mat_data[n*column + i]);
+                vec[0][i] = mat_data[n*column + i];
             }
             return vec;
         }
-        return std::vector<double>();
+        return Matrix();
     }
 
     // 获取列向量
-    std::vector<double> Matrix::getColumn(std::size_t n)const
+    Matrix Matrix::getColumn(std::size_t n)const
     {
-        if (n >= 0 && n < this->column)
+        if (this->row > 0)
         {
-            if (this->column == 0)
+            Matrix vec(this->row, 1);
+            for (std::size_t i = 0; i < this->row; i++)
             {
-                return std::vector<double>();
+                vec[1][0] = mat_data[i*column + n];
             }
-            else
-            {
-                std::vector<double> vec;
-                for (std::size_t i = 0; i < this->row; i++)
-                {
-                    vec.emplace_back(mat_data[i*column + n]);
-                }
-                return vec;
-            }
+            return vec;
         }
-        else
-        {
-            throw std::out_of_range("Out of index range.");
-        }
-        return std::vector<double>();
+        return Matrix();
     }
 
     // 获取对角元素
@@ -616,7 +605,7 @@ namespace mat
 
     /* 矩阵QR分解(A = QR),Q为正交矩阵,R为上三角矩阵(且主对角线元素>=0时,
     分解具有唯一性)。若R满秩，主对角线元素 > 0 */
-    std::vector<Matrix> Matrix::QR()const
+    std::pair<Matrix, Matrix> Matrix::QR()const
     {
         if (this->row > 0 && this->row == this->column)
         {
@@ -689,13 +678,13 @@ namespace mat
             delete[] u_r;
 
             // 迭代完成后 Q = Q_r, R = A_r
-            return std::vector<Matrix>({ Q, A });
+            return std::make_pair(Q, A);
         }
         else
         {
             throw std::length_error("The matrix must be a square matrix.");
         }
-        return std::vector<Matrix>();
+        return std::make_pair(Matrix(), Matrix());
     }
 
     // 求矩阵全部特征值(带双步位移的QR方法), e为精度水平
