@@ -3,19 +3,19 @@
 namespace mat
 {
     // 获取矩阵行列数
-    const std::pair<std::size_t, std::size_t> size(const Matrix& mat)
+    const std::pair<usize, usize> size(const Matrix& mat)
     {
         return mat.size();
     }
 
     // 获取行向量
-    Matrix getRow(const Matrix& mat, std::size_t n)
+    Matrix getRow(const Matrix& mat, usize n)
     {
         return mat.getRow(n);
     }
 
     // 获取列向量
-    Matrix getColumn(const Matrix& mat, std::size_t n)
+    Matrix getColumn(const Matrix& mat, usize n)
     {
         return mat.getColumn(n);
     }
@@ -45,7 +45,7 @@ namespace mat
     }
 
     // 矩阵的秩
-    std::size_t rank(const Matrix& mat)
+    usize rank(const Matrix& mat)
     {
         return mat.rank();
     }
@@ -80,13 +80,19 @@ namespace mat
         return mat.eigs(e);
     }
 
+    // 子阵
+    Matrix subMat(const Matrix& mat, usize r1, usize c1, usize r2, usize c2)
+    {
+        return mat.subMat(r1, c1, r2, c2);
+    }
+
     // 单位矩阵
-    Matrix eye(const std::size_t& m, const std::size_t& n)
+    Matrix eye(const usize& m, const usize& n)
     {
         Matrix matrix(m, n);
-        std::size_t size = 0;
+        usize size = 0;
         m < n ? size = m : size = n;
-        for (std::size_t i = 0; i < size; i++)
+        for (usize i = 0; i < size; i++)
         {
             matrix[i][i] = 1;
         }
@@ -94,7 +100,7 @@ namespace mat
     }
 
     // 元素全为1的矩阵
-    Matrix ones(const std::size_t& m, const std::size_t& n)
+    Matrix ones(const usize& m, const usize& n)
     {
         return Matrix(m, n) + 1.0;
     }
@@ -102,9 +108,9 @@ namespace mat
     // 以向量为对角元素生成方阵
     Matrix diag(const std::initializer_list<double>& nums)
     {
-        std::size_t size = nums.size();
+        usize size = nums.size();
         Matrix matrix(size, size);
-        for (std::size_t i = 0; i < size; i++)
+        for (usize i = 0; i < size; i++)
         {
             matrix[i][i] = *(nums.begin() + i);
         }
@@ -114,19 +120,19 @@ namespace mat
     // [M1; M2; ...], 需要列数相等
     Matrix rbind(const std::initializer_list<Matrix>& M)
     {
-        std::size_t count = M.size();
+        usize count = M.size();
         if (count > 0)
         {
-            std::size_t row;       // 拼接后矩阵的行数
-            std::size_t column;    // 拼接后矩阵的列数（拼接前后保持不变）
+            usize row;       // 拼接后矩阵的行数
+            usize column;    // 拼接后矩阵的列数（拼接前后保持不变）
 
-            std::size_t temp_row = 0;
-            std::size_t temp_column = 0;
+            usize temp_row = 0;
+            usize temp_column = 0;
 
             std::tie(row, column) = (*(M.begin())).size(); // 第一个矩阵的行列数
 
             // 计算拼接后矩阵的行数, 并判断矩阵是否可拼接
-            for (std::size_t i = 1; i < count; i++)
+            for (usize i = 1; i < count; i++)
             {
                 std::tie(temp_row, temp_column) = (*(M.begin() + i)).size();
 
@@ -145,13 +151,13 @@ namespace mat
 
             // 进行矩阵拼接
             size_t p = 0;
-            for (std::size_t i = 0; i < count; i++)
+            for (usize i = 0; i < count; i++)
             {
                 temp_row = std::get<0>((*(M.begin() + i)).size());
 
-                for (std::size_t j = 0; j < temp_row; j++)
+                for (usize j = 0; j < temp_row; j++)
                 {
-                    for (std::size_t k = 0; k < column; k++)
+                    for (usize k = 0; k < column; k++)
                     {
                         matrix[j + p][k] = (*(M.begin() + i))[j][k];
                     }
@@ -166,19 +172,19 @@ namespace mat
     // [M1, M2, ...], 需要行数相等
     Matrix cbind(const std::initializer_list<Matrix>& M)
     {
-        std::size_t count = M.size();
+        usize count = M.size();
         if (count > 0)
         {
-            std::size_t row;       // 拼接后矩阵的行数（拼接前后保持不变）
-            std::size_t column;    // 拼接后矩阵的列数
+            usize row;       // 拼接后矩阵的行数（拼接前后保持不变）
+            usize column;    // 拼接后矩阵的列数
 
-            std::size_t temp_row = 0;
-            std::size_t temp_column = 0;
+            usize temp_row = 0;
+            usize temp_column = 0;
 
             std::tie(row, column) = (*(M.begin())).size(); // 第一个矩阵的行列数
 
             // 判断矩阵是否可拼接,并计算拼接后矩阵的行数
-            for (std::size_t i = 1; i < count; i++)
+            for (usize i = 1; i < count; i++)
             {
                 std::tie(temp_row, temp_column) = (*(M.begin() + i)).size();
 
@@ -195,13 +201,13 @@ namespace mat
 
             // 拼接矩阵 [M1, M2, ...]
             size_t p = 0;
-            for (std::size_t i = 0; i < count; i++)
+            for (usize i = 0; i < count; i++)
             {
                 temp_column = std::get<1>((*(M.begin() + i)).size());
 
-                for (std::size_t j = 0; j < row; j++)
+                for (usize j = 0; j < row; j++)
                 {
-                    for (std::size_t k = 0; k < temp_column; k++)
+                    for (usize k = 0; k < temp_column; k++)
                     {
                         matrix[j][k + p] = (*(M.begin() + i))[j][k];
                     }
@@ -237,11 +243,11 @@ namespace mat
 
         auto temp = Matrix::gaussElimination(A, b);                // 对系数矩阵进行全选主元的高斯消元
         Matrix& matrix = std::get<0>(temp);                        // 全选主元高斯消元后的矩阵
-        std::unique_ptr<std::size_t[]>& R = std::get<1>(temp);     // 行交换信息
-        std::unique_ptr<std::size_t[]>& C = std::get<2>(temp);     // 列交换信息
-        std::size_t rankA = std::get<3>(temp);                     // 系数矩阵的秩rank(A)
-        std::size_t rankAb = cbind({ A, b }).rank();               // rank(A,b)
-        std::size_t n = A.column;                                  // 未知数个数
+        std::unique_ptr<usize[]>& R = std::get<1>(temp);     // 行交换信息
+        std::unique_ptr<usize[]>& C = std::get<2>(temp);     // 列交换信息
+        usize rankA = std::get<3>(temp);                     // 系数矩阵的秩rank(A)
+        usize rankAb = cbind({ A, b }).rank();               // rank(A,b)
+        usize n = A.column;                                  // 未知数个数
         Matrix& vec = std::get<4>(temp);                           // 高斯消元后方程组的目标向量
 
         // rank(A) == rank(A,b) && rank(A) == n: 方程有唯一解
@@ -256,7 +262,7 @@ namespace mat
             // 求解高斯消元后的上三角方程组
             for (int i = rankA - 1; i >= 0; i--)
             {
-                for (std::size_t j = 0; j < rankA - i - 1; j++)
+                for (usize j = 0; j < rankA - i - 1; j++)
                 {
                     vec[i][0] -= matrix[i][rankA - 1 - j] * x[rankA - 1 - j][0];
                 }
@@ -267,7 +273,7 @@ namespace mat
             // 方程有无穷多个解时，另解向量x部分元素为0，得到一个特解
             if (rankA < n)
             {
-                for (std::size_t i = rankA; i < n; i++)
+                for (usize i = rankA; i < n; i++)
                 {
                     x[i][0] = 0;
                 }
@@ -317,9 +323,9 @@ namespace mat
     {
         if (m1.row == m2.row && m1.column == m2.column)
         {
-            std::size_t size = m1.row * m1.column;
+            usize size = m1.row * m1.column;
             Matrix matrix(m1.row, m1.column);
-            for (std::size_t i = 0; i < size; i++)
+            for (usize i = 0; i < size; i++)
             {
                 matrix.mat_data[i] = m1.mat_data[i] + m2.mat_data[i];
             }
@@ -335,8 +341,8 @@ namespace mat
     {
         if (m1.row == m2.row && m1.column == m2.column)
         {
-            std::size_t size = m1.row * m1.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m1.row * m1.column;
+            for (usize i = 0; i < size; i++)
             {
                 m2.mat_data[i] += m1.mat_data[i];
             }
@@ -353,8 +359,8 @@ namespace mat
         if (m.row > 0)
         {
             Matrix matrix(m.row, m.column);
-            std::size_t size = m.row * m.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m.row * m.column;
+            for (usize i = 0; i < size; i++)
             {
                 matrix.mat_data[i] = m.mat_data[i] + num;
             }
@@ -370,8 +376,8 @@ namespace mat
     {
         if (m1.row == m2.row && m1.column == m2.column)
         {
-            std::size_t size = m1.row * m1.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m1.row * m1.column;
+            for (usize i = 0; i < size; i++)
             {
                 m1.mat_data[i] += m2.mat_data[i];
             }
@@ -391,8 +397,8 @@ namespace mat
         if (m.row > 0)
         {
             Matrix matrix(m.row, m.column);
-            std::size_t size = m.row * m.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m.row * m.column;
+            for (usize i = 0; i < size; i++)
             {
                 matrix.mat_data[i] = m.mat_data[i] + num;
             }
@@ -408,8 +414,8 @@ namespace mat
     {
         if (m.row > 0)
         {
-            std::size_t size = m.row * m.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m.row * m.column;
+            for (usize i = 0; i < size; i++)
             {
                 m.mat_data[i] += num;
             }
@@ -424,8 +430,8 @@ namespace mat
     {
         if (m.row > 0)
         {
-            std::size_t size = m.row * m.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m.row * m.column;
+            for (usize i = 0; i < size; i++)
             {
                 m.mat_data[i] += num;
             }
@@ -441,8 +447,8 @@ namespace mat
     Matrix operator-(const Matrix& m)
     {
         Matrix matrix(m.row, m.column);
-        std::size_t size = m.row * m.column;
-        for (std::size_t i = 0; i < size; i++)
+        usize size = m.row * m.column;
+        for (usize i = 0; i < size; i++)
         {
             matrix.mat_data[i] = -(m.mat_data[i]);
         }
@@ -452,9 +458,9 @@ namespace mat
     {
         if (m1.row == m2.row && m1.column == m2.column)
         {
-            std::size_t size = m1.row * m1.column;
+            usize size = m1.row * m1.column;
             Matrix matrix(m1.row, m1.column);
-            for (std::size_t i = 0; i < size; i++)
+            for (usize i = 0; i < size; i++)
             {
                 matrix.mat_data[i] = m1.mat_data[i] - m2.mat_data[i];
             }
@@ -470,8 +476,8 @@ namespace mat
     {
         if (m1.row == m2.row && m1.column == m2.column)
         {
-            std::size_t size = m1.row * m1.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m1.row * m1.column;
+            for (usize i = 0; i < size; i++)
             {
                 m2.mat_data[i] = m1.mat_data[i] - m2.mat_data[i];
             }
@@ -488,8 +494,8 @@ namespace mat
         if (m.row > 0)
         {
             Matrix matrix(m.row, m.column);
-            std::size_t size = m.row * m.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m.row * m.column;
+            for (usize i = 0; i < size; i++)
             {
                 matrix.mat_data[i] = m.mat_data[i] - num;
             }
@@ -505,8 +511,8 @@ namespace mat
     {
         if (m1.row == m2.row && m1.column == m2.column)
         {
-            std::size_t size = m1.row * m1.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m1.row * m1.column;
+            for (usize i = 0; i < size; i++)
             {
                 m1.mat_data[i] -= m2.mat_data[i];
             }
@@ -526,8 +532,8 @@ namespace mat
         if (m.row > 0)
         {
             Matrix matrix(m.row, m.column);
-            std::size_t size = m.row * m.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m.row * m.column;
+            for (usize i = 0; i < size; i++)
             {
                 matrix.mat_data[i] = num - m.mat_data[i];
             }
@@ -543,8 +549,8 @@ namespace mat
     {
         if (m.row > 0)
         {
-            std::size_t size = m.row * m.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m.row * m.column;
+            for (usize i = 0; i < size; i++)
             {
                 m.mat_data[i] = num - m.mat_data[i];
             }
@@ -559,8 +565,8 @@ namespace mat
     {
         if (m.row > 0)
         {
-            std::size_t size = m.row * m.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m.row * m.column;
+            for (usize i = 0; i < size; i++)
             {
                 m.mat_data[i] -= num;
             }
@@ -577,17 +583,17 @@ namespace mat
     {
         if (std::get<1>(m1.size()) == std::get<0>(m2.size()))
         {
-            std::size_t row = std::get<0>(m1.size());
-            std::size_t column = std::get<1>(m2.size());
+            usize row = std::get<0>(m1.size());
+            usize column = std::get<1>(m2.size());
             Matrix matrix(row, column);
 
-            std::size_t count = std::get<0>(m2.size());
-            for (std::size_t i = 0; i < row; i++)
+            usize count = std::get<0>(m2.size());
+            for (usize i = 0; i < row; i++)
             {
-                for (std::size_t j = 0; j < column; j++)
+                for (usize j = 0; j < column; j++)
                 {
                     double sum = 0;
-                    for (std::size_t k = 0; k < count; k++)
+                    for (usize k = 0; k < count; k++)
                     {
                         sum += m1[i][k] * m2[k][j];
                     }
@@ -605,8 +611,8 @@ namespace mat
     Matrix operator*(const Matrix& m, const double& num)
     {
         Matrix matrix(m.row, m.column);
-        std::size_t size = m.row * m.column;
-        for (std::size_t i = 0; i < size; i++)
+        usize size = m.row * m.column;
+        for (usize i = 0; i < size; i++)
         {
             matrix.mat_data[i] = m.mat_data[i] * num;
         }
@@ -614,8 +620,8 @@ namespace mat
     }
     Matrix& operator*(Matrix&& m, const double& num)
     {
-        std::size_t size = m.row * m.column;
-        for (std::size_t i = 0; i < size; i++)
+        usize size = m.row * m.column;
+        for (usize i = 0; i < size; i++)
         {
             m.mat_data[i] *= num;
         }
@@ -628,8 +634,8 @@ namespace mat
     Matrix operator*(const double& num, const Matrix& m)
     {
         Matrix matrix(m.row, m.column);
-        std::size_t size = m.row * m.column;
-        for (std::size_t i = 0; i < size; i++)
+        usize size = m.row * m.column;
+        for (usize i = 0; i < size; i++)
         {
             matrix.mat_data[i] = num * m.mat_data[i];
         }
@@ -637,8 +643,8 @@ namespace mat
     }
     Matrix& operator*(const double& num, Matrix&& m)
     {
-        std::size_t size = m.row * m.column;
-        for (std::size_t i = 0; i < size; i++)
+        usize size = m.row * m.column;
+        for (usize i = 0; i < size; i++)
         {
             m.mat_data[i] *= num;
         }
@@ -653,8 +659,8 @@ namespace mat
             if (num != 0)
             {
                 Matrix matrix(m.row, m.column);
-                std::size_t size = m.row * m.column;
-                for (std::size_t i = 0; i < size; i++)
+                usize size = m.row * m.column;
+                for (usize i = 0; i < size; i++)
                 {
                     matrix.mat_data[i] = m.mat_data[i] / num;
                 }
@@ -677,8 +683,8 @@ namespace mat
         {
             if (num != 0)
             {
-                std::size_t size = m.row * m.column;
-                for (std::size_t i = 0; i < size; i++)
+                usize size = m.row * m.column;
+                for (usize i = 0; i < size; i++)
                 {
                     m.mat_data[i] /= num;
                 }
@@ -701,8 +707,8 @@ namespace mat
         if (m1.row == m2.row && m1.column == m2.column)
         {
             bool flag = true;
-            std::size_t size = m1.row * m1.column;
-            for (std::size_t i = 0; i < size; i++)
+            usize size = m1.row * m1.column;
+            for (usize i = 0; i < size; i++)
             {
                 if (m1.mat_data[i] != m2.mat_data[i])
                 {

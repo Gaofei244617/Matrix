@@ -5,14 +5,14 @@
 
 namespace mat
 {
-    const std::pair<std::size_t, std::size_t> size(const Matrix& mat);                     // 获取矩阵行列数
-    Matrix getRow(const Matrix& mat, std::size_t n);                                       // 获取行向量
-    Matrix getColumn(const Matrix& mat, std::size_t n);                                    // 获取列向量
+    const std::pair<usize, usize> size(const Matrix& mat);                                 // 获取矩阵行列数
+    Matrix getRow(const Matrix& mat, usize n);                                             // 获取行向量
+    Matrix getColumn(const Matrix& mat, usize n);                                          // 获取列向量
     std::vector<double> getDiag(const Matrix& mat);                                        // 获取对角元素
     double normOne(const Matrix& mat);                                                     // 1范数,列和范数
     double normInf(const Matrix& mat);                                                     // 无穷范数,行和范数
     Matrix trans(const Matrix& mat);                                                       // 矩阵转置
-    std::size_t rank(const Matrix& mat);                                                   // 矩阵的秩
+    usize rank(const Matrix& mat);                                                         // 矩阵的秩
     double trace(const Matrix& mat);                                                       // 矩阵的迹
     Matrix inv(const Matrix& mat);                                                         // 逆矩阵
     double det(const Matrix& mat);                                                         // 矩阵行列式
@@ -20,15 +20,15 @@ namespace mat
     std::pair<Matrix, Matrix> LU(const Matrix& mat);                                       // 矩阵LU分解
     std::vector<std::complex<double>> eigs(const Matrix& mat, double e = 0);               // 矩阵特征值
     std::tuple<Matrix, Matrix, Matrix> SVD(const Matrix& mat);                             // 奇异值分解，返回S、V、D三个矩阵
-    Matrix subMat(const Matrix& mat, std::size_t r1, std::size_t c1, std::size_t r2, std::size_t c2);
+    Matrix subMat(const Matrix& mat, usize r1, usize c1, usize r2, usize c2);              // 子阵
 
-    Matrix eye(const std::size_t& m, const std::size_t& n);                                // 单位矩阵
-    Matrix ones(const std::size_t& m, const std::size_t& n);                               // 元素全为1的矩阵
+    Matrix eye(const usize& m, const usize& n);                                            // 单位矩阵
+    Matrix ones(const usize& m, const usize& n);                                           // 元素全为1的矩阵
     Matrix diag(const std::initializer_list<double>& nums);                                // 以向量为对角元素生成方阵
     Matrix rbind(const std::initializer_list<Matrix>& M);                                  // [M1; M2; ...], 需要列数相等
     Matrix cbind(const std::initializer_list<Matrix>& M);                                  // [M1, M2, ...], 需要行数相等
 
-    std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b);                       // 求解线性方程组 Ax = b
+    std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b);                        // 求解线性方程组 Ax = b
 
     /***********************************************************************************************************************/
     // 加法运算
