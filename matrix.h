@@ -27,7 +27,8 @@ namespace mat
 
     std::tuple<Matrix, int> solve(const Matrix& A, const Matrix& b);                       // 求解线性方程组 Ax = b
 
-            // 加法运算
+    /***********************************************************************************************************************/
+    // 加法运算
     Matrix operator+(const Matrix& m);                                  // +M
     Matrix operator+(const Matrix& m1, const Matrix& m2);               // M + M
     Matrix& operator+(const Matrix& m1, Matrix&& m2);                   // M + move(M)

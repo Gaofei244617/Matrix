@@ -136,43 +136,48 @@ void print(const Matrix& m)
 
 int main()
 {
-    //Matrix m = { { 1,2,3,4,1 },{ 7,6,1,5,2 },{ 3,1,1,1,3 },{ 4,6,9,2,4 },{ 7,9,0,1,3 } };
-    //Matrix m2 = { { 1,2,3,4,1 },{ 7,6,1,5,2 },{ 3,1,1,1,3 },{ 4,6,9,2,4 },{ 2,4,6,8,2 } };
-    //Matrix m3 = Matrix::diag({ 1,2,3,4,5 });
-    ////DWORD start = GetTickCount();
-    ////DWORD end = GetTickCount();
-    ////cout << "The run time is:" << (end - start) << " ms" << endl;
-    //m3[4][3] = 2;
-    //m3[3][4] = 1;
-    //auto a = m.eigs();
+    // 5X5矩阵, rank = 5
+    Matrix A = { {1,10,3,6,7}, {-100,5,4,1,9}, {2,0,3,1,1}, {4,4,9,2,0}, {1,5,2,3,4} };
+    // 5X5矩阵, rank = 4
+    Matrix B = { {1,10,3,6,7}, {1,10,3,6,7}, {2,0,3,1,1}, {4,4,9,2,0}, {1,5,2,3,4} };
+    // 4X5矩阵, rank = 4
+    Matrix C = { {1,10,3,6,7}, {-100,5,4,1,9}, {2,0,3,1,1}, {4,4,9,2,0} };
+    // 5X4矩阵, rank = 4
+    Matrix D = { {1,10,3,6}, {-100,5,4,1}, {2,0,3,1}, {4,4,9,2}, {1,5,2,3} };
 
-    Matrix matrix = { {1,10,3,6,7},{-100,5,4,1,9},{2,0,3,1,1},{4,4,9,2,0},{1,5,2,3,4} };
+    // 向量
     Matrix b = Matrix({ 1,2,3,4,5 }).trans();
-    //Matrix matrix = { {3,4},{6,7},{6,8} };
-    //Matrix b = Matrix({ 1,3,2 }).trans();
+    /****************************************************************************************/
 
-    //Matrix matrix = { { 3,4,5 } };
-    //Matrix b = Matrix({ 7 }).trans();
+    //// 矩阵的秩
+    //cout << "rank(A) = " << A.rank() << endl;
 
-    cout << "The matrix is:" << endl;
-    print(matrix);
-    cout << endl;
-    cout << "The b is:" << endl;
-    print(b);
-    cout << endl;
-    cout << "The solution is:" << endl;
-    print(std::get<0>(solve(matrix, b)));
-    //cout << std::get<1>(solve(matrix, b));
-    cout << endl;
+    //// 矩阵的迹
+    //cout << "trace(A) = " << A.trace() << endl;
 
-    //cout << "Rank = " << matrix.rank() << endl << endl;
-    //cout << "After gauss elimination:" << endl;
-    //auto temp = Matrix::gaussElimination(matrix);
-    //print(get<0>(temp));
-    //cout << endl;
+    //// 行列式
+    //cout << "det(A) = " << det(A) << endl;
 
-    //Matrix m = { { 1,2 },{ 3,4 } };
-    //cout << m.det() << endl;
+    //// 逆矩阵
+    //cout << "inv(A) = " << endl;
+    //print(inv(A));
+
+    //// QR分解
+    //cout << "QR Decomposition:" << endl;
+    //auto QRVec = QR(A);
+    //cout << "Q = " << endl;
+    //print(QRVec[0]);
+    //cout << "R = " << endl;
+    //print(QRVec[1]);
+
+    //// 解线性方程组
+    //cout << "方程组的解：" << endl;
+    //print(std::get<0>(solve(A, b)));
+
+    //// 特征值
+    //auto val = eigs(A);
+    //for (auto& v : val) { cout << v << endl; }
 
     system("pause");
+    return 0;
 }
