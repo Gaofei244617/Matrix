@@ -75,9 +75,9 @@ namespace mat
     }
 
     // 矩阵特征值
-    std::vector<std::complex<double>> eigs(const Matrix& mat, double e)
+    std::vector<std::complex<double>> eig(const Matrix& mat, double e)
     {
-        return mat.eigs(e);
+        return mat.eig(e);
     }
 
     // 子阵
@@ -229,13 +229,13 @@ namespace mat
         // A为系数矩阵，b为目标向量
         // 采用全选主元的高斯消元法求解方程组
 
-        // (1)若方程有唯一解：   返回 tuple(解向量x,  标志量0)
-        // (2)若方程有无穷多解： 返回 tuple(一个特解x, 标志量1)
-        // (3)若方程无精确解：   返回 tuple(近似解x*,  标志量2)
+        // (1)若方程有唯一解：   返回 pair(解向量x,  标志量0)
+        // (2)若方程有无穷多解： 返回 pair(一个特解x, 标志量1)
+        // (3)若方程无精确解：   返回 pair(近似解x*,  标志量2)
         //    近似解x*使得|Ax* - b|最小
         /********************************************************/
 
-        // 判断系数矩阵的行数宇目标向量的行数是否相等
+        // 判断系数矩阵的行数与目标向量的行数是否相等
         if (A.row != b.row)
         {
             throw std::length_error("Size of coefficient matrix and target vector does not match.");
@@ -243,11 +243,11 @@ namespace mat
 
         auto temp = Matrix::gaussElimination(A, b);                // 对系数矩阵进行全选主元的高斯消元
         Matrix& matrix = std::get<0>(temp);                        // 全选主元高斯消元后的矩阵
-        std::unique_ptr<usize[]>& R = std::get<1>(temp);     // 行交换信息
-        std::unique_ptr<usize[]>& C = std::get<2>(temp);     // 列交换信息
-        usize rankA = std::get<3>(temp);                     // 系数矩阵的秩rank(A)
-        usize rankAb = cbind({ A, b }).rank();               // rank(A,b)
-        usize n = A.column;                                  // 未知数个数
+        std::unique_ptr<usize[]>& R = std::get<1>(temp);           // 行交换信息
+        std::unique_ptr<usize[]>& C = std::get<2>(temp);           // 列交换信息
+        usize rankA = std::get<3>(temp);                           // 系数矩阵的秩rank(A)
+        usize rankAb = cbind({ A, b }).rank();                     // rank(A,b)
+        usize n = A.column;                                        // 未知数个数
         Matrix& vec = std::get<4>(temp);                           // 高斯消元后方程组的目标向量
 
         // rank(A) == rank(A,b) && rank(A) == n: 方程有唯一解
@@ -314,6 +314,7 @@ namespace mat
         return std::make_pair(Matrix(), 2);
     }
 
+    /*************************************************************************************/
     // 加法运算
     Matrix operator+(const Matrix& m)
     {

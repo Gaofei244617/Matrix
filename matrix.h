@@ -16,9 +16,9 @@ namespace mat
     double trace(const Matrix& mat);                                                       // 矩阵的迹
     Matrix inv(const Matrix& mat);                                                         // 逆矩阵
     double det(const Matrix& mat);                                                         // 矩阵行列式
-    std::pair<Matrix, Matrix> QR(const Matrix& mat);                                       // 矩阵QR分解
-    std::pair<Matrix, Matrix> LU(const Matrix& mat);                                       // 矩阵LU分解
-    std::vector<std::complex<double>> eigs(const Matrix& mat, double e = 0);               // 矩阵特征值
+    std::pair<Matrix, Matrix> QR(const Matrix& mat);                                       // 矩阵QR分解,返回值{Q,R}
+    std::tuple<Matrix, Matrix, Matrix> LU(const Matrix& mat);                              // 矩阵LU分解,返回值{P,L,U}
+    std::vector<std::complex<double>> eig(const Matrix& mat, double e = 0);                // 矩阵特征值
     std::tuple<Matrix, Matrix, Matrix> SVD(const Matrix& mat);                             // 奇异值分解，返回S、V、D三个矩阵
     Matrix subMat(const Matrix& mat, usize r1, usize c1, usize r2, usize c2);              // 子阵
 

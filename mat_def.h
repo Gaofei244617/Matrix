@@ -69,8 +69,8 @@ namespace mat
         Matrix inv()const;                                                         // 逆矩阵
         double det()const;                                                         // 矩阵行列式
         std::pair<Matrix, Matrix> QR()const;                                       // 矩阵QR分解
-        std::pair<Matrix, Matrix> LU()const;                                       // 矩阵LU分解
-        std::vector<std::complex<double>> eigs(double e = 0)const;                 // 矩阵特征值
+        std::tuple<Matrix, Matrix, Matrix> LU()const;                              // 矩阵LU分解
+        std::vector<std::complex<double>> eig(double e = 0)const;                  // 矩阵特征值
         std::tuple<Matrix, Matrix, Matrix> SVD()const;                             // 奇异值分解，返回S、V、D三个矩阵
         Matrix subMat(usize r1, usize c1, usize r2, usize c2)const;                // 子阵
 
@@ -85,6 +85,7 @@ namespace mat
         Matrix& iterM(Matrix& A)const;
 
         // 全选主元高斯消去法
+        // 返回值分别为：{消元后的矩阵，行交换记录，列交换记录，矩阵的秩，消元后的向量}
         static std::tuple<Matrix, std::unique_ptr<usize[]>, std::unique_ptr<usize[]>, usize, Matrix>
             gaussElimination(const Matrix& A, const Matrix& b = Matrix());
 

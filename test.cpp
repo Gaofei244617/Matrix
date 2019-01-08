@@ -68,7 +68,7 @@ int main()
 
     // 特征值
     cout << "矩阵A的特征值：" << endl;
-    auto val = eigs(A);
+    auto val = eig(A);
     for (auto& v : val) { cout << v << endl; }
 
     system("pause");

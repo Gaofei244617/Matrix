@@ -688,8 +688,11 @@ namespace mat
     }
 
     // 求矩阵全部特征值(带双步位移的QR方法), e为精度水平
-    std::vector<std::complex<double>> Matrix::eigs(double e)const
+    std::vector<std::complex<double>> Matrix::eig(double e)const
     {
+        /*QR方法适用于计算一般实矩阵的全部特征值，尤其适用于中小型实矩阵*/
+        /*双步位移可以加速收敛*/
+
         // 只有非空方阵才能求特征值
         if (this->row != this->column || this->row == 0)
         {
