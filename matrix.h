@@ -24,50 +24,12 @@ namespace mat
 
     Matrix eye(const usize& m, const usize& n);                                            // 单位矩阵
     Matrix ones(const usize& m, const usize& n);                                           // 元素全为1的矩阵
+    Matrix zeros(const usize& m, const usize& n);                                          // 元素全为0的矩阵
     Matrix diag(const std::initializer_list<double>& nums);                                // 以向量为对角元素生成方阵
     Matrix rbind(const std::initializer_list<Matrix>& M);                                  // [M1; M2; ...], 需要列数相等
     Matrix cbind(const std::initializer_list<Matrix>& M);                                  // [M1, M2, ...], 需要行数相等
 
     std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b);                        // 求解线性方程组 Ax = b
-
-    /***********************************************************************************************************************/
-    // 加法运算
-    Matrix operator+(const Matrix& m);                                  // +M
-    Matrix operator+(const Matrix& m1, const Matrix& m2);               // M + M
-    Matrix& operator+(const Matrix& m1, Matrix&& m2);                   // M + move(M)
-    Matrix& operator+(Matrix&& m1, const Matrix& m2);                   // move(M) + M
-    Matrix& operator+(Matrix&& m1, Matrix&& m2);                        // move(M) + move(M)
-    Matrix operator+(const Matrix& m, const double& num);               // M + num
-    Matrix operator+(const double& num, const Matrix& m);               // num + M
-    Matrix& operator+(const double& num, Matrix&& m);                   // num + move(M)
-    Matrix& operator+(Matrix&& m, const double& num);                   // move(M) + num
-
-    // 减法运算
-    Matrix operator-(const Matrix& m);                                  // -M
-    Matrix operator-(const Matrix& m1, const Matrix& m2);               // M - M
-    Matrix& operator-(const Matrix& m1, Matrix&& m);                    // M - move(M)
-    Matrix& operator-(Matrix&& m1, const Matrix& m2);                   // move(M) - M
-    Matrix& operator-(Matrix&& m1, Matrix&& m2);                        // move(M) - move(M)
-    Matrix operator-(const Matrix& m, const double& num);               // M - num
-    Matrix operator-(const double& num, const Matrix& m);               // num - M
-    Matrix& operator-(const double& num, Matrix&& m);                   // num - move(M)
-    Matrix& operator-(Matrix&& m, const double& num);                   // move(M) - num
-
-    // 乘法运算
-    Matrix operator*(const Matrix& m1, const Matrix& m2);               // M * M
-    Matrix operator*(const Matrix& m, const double& num);               // M * num
-    Matrix& operator*(Matrix&& m, const double& num);                   // move(M) * num
-    Matrix& operator*(Matrix&& m1, Matrix&& m2);                        // move(M) * move(M)
-    Matrix operator*(const double& num, const Matrix& m);               // num * M
-    Matrix& operator*(const double& num, Matrix&& m);                   // num * move(M)
-
-    // 除法运算
-    Matrix operator/(const Matrix& m, const double& num);               // M / num
-    Matrix& operator/(Matrix&& m, const double& num);                   // move(M) / num
-
-    // 逻辑运算符
-    bool operator==(const Matrix& m1, const Matrix& m2)noexcept;        // 等于
-    bool operator!=(const Matrix& m1, const Matrix& m2)noexcept;        // 不等于
 }
 
 #endif

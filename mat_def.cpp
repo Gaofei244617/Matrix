@@ -1,5 +1,8 @@
 ﻿#include "mat_def.h"
 #include "matrix.h"
+#include "mat_operator.h"
+#include <cmath>
+#include <memory>
 
 namespace mat
 {
@@ -687,6 +690,109 @@ namespace mat
         return std::make_pair(Matrix(), Matrix());
     }
 
+    /* 矩阵LU分解(Doolittle分解, A = LU), L为下三角阵(主对角元素为1), U为上三角矩阵 */
+    std::tuple<Matrix, Matrix, Matrix> Matrix::LU()const
+    {
+        // LU分解只针对方阵
+        if (this->row != this->column)
+        {
+            return std::make_tuple(Matrix(), Matrix(), Matrix());
+        }
+
+        // 矩阵不满秩
+        if (this->rank() != this->row)
+        {
+            return std::make_tuple(Matrix(), Matrix(), Matrix());
+        }
+
+        const usize N = this->row;  // 方阵维数
+        Matrix P = eye(N, N);       // 置换矩阵
+        Matrix A(*this);            // 计算结果暂存在矩阵A中
+
+        // 每一次循环可计算矩阵L第k行和矩阵U第k列元素, 结果(LU非零元素)暂存到矩阵A中
+        for (usize k = 0; k < N; k++)
+        {
+            // (1)选主元
+            usize p_row = k;     // 记录所在的行
+            for (usize i = k; i < N; i++)
+            {
+                double s_max = 0;
+                double a = A[i][k];
+                for (usize t = 0; t < k; t++)
+                {
+                    a = a - A[i][t] * A[t][k];
+                }
+
+                // 确定主元所在行
+                if (i > k)
+                {
+                    if (abs(a) > abs(s_max))
+                    {
+                        s_max = a;
+                        p_row = i;
+                    }
+                }
+            }
+
+            // (2)根据主元所在位置进行行交换
+            double temp = 0;
+            for (usize j = 0; j < N; j++)
+            {
+                // 置换矩阵(行交换)
+                temp = P[k][j];
+                P[k][j] = P[p_row][j];
+                P[p_row][j] = temp;
+
+                // 矩阵A(行交换)
+                temp = A[k][j];
+                A[k][j] = A[p_row][j];
+                A[p_row][j] = temp;
+            }
+
+            // (3)计算矩阵L第k行和矩阵U第k列元素
+            // 矩阵U第k列
+            for (usize j = k; j < N; j++)
+            {
+                double temp_u = A[k][j];
+                for (usize t = 0; t < k; t++)
+                {
+                    temp_u = temp_u - A[k][t] * A[t][j];
+                }
+                A[k][j] = temp_u;
+            }
+            // 矩阵L第k行
+            for (usize i = k + 1; i < N; i++)
+            {
+                double temp_L = A[i][k];
+                for (usize t = 0; t < k; t++)
+                {
+                    temp_L = temp_L - A[i][t] * A[t][k];
+                }
+                A[i][k] = temp_L / A[k][k];
+            }
+        }
+
+        Matrix L = eye(N, N);       // 下三角矩阵(主对角元素为1)
+        Matrix U(N, N);             // 上三角矩阵
+
+        // 生成矩阵L和U
+        for (usize i = 0; i < N; i++)
+        {
+            // 上三角阵U
+            for (usize j = i; j < N; j++)
+            {
+                U[i][j] = A[i][j];
+            }
+            // 下三角阵L(主对角元素为1)
+            for (usize j = 0; j < i; j++)
+            {
+                L[i][j] = A[i][j];
+            }
+        }
+
+        return std::make_tuple(P, L, U);
+    }
+
     // 求矩阵全部特征值(带双步位移的QR方法), e为精度水平
     std::vector<std::complex<double>> Matrix::eig(double e)const
     {
@@ -900,9 +1006,9 @@ namespace mat
         Matrix::gaussElimination(const Matrix& A, const Matrix& b)
     {
         /***************************************************************/
-        // 形参vec[可选]，默认为空向量
-        // 若vec不为空，则需传入线性方程组 Ax = b中的向量b，
-        // 函数返回值中的第四个参数为向量b通过高斯消元过程中的行变换得到的新向量
+        // 形参b[可选]，默认为空向量
+        // 若b不为空，则需传入线性方程组 Ax = b中的向量b，
+        // 函数返回值中的第五个参数为向量b通过高斯消元过程中的行变换得到的新向量
         /***************************************************************/
 
         // 空矩阵秩为0
@@ -911,12 +1017,13 @@ namespace mat
             return std::make_tuple(Matrix(), nullptr, nullptr, 0, Matrix());
         }
 
-        // 形参vec为一向量，与消元矩阵具有相同的行数
-        if (b != Matrix())
+        // b不采用默认值
+        if (b.row != 0)
         {
             if (b.column != 1 || b.row != A.row)
             {
-                throw std::length_error("The length of passed in vector should equal the row of the matrix.");
+                throw std::length_error("The length of matrix is wrong.");
+                return std::make_tuple(Matrix(), nullptr, nullptr, 0, Matrix());
             }
         }
 

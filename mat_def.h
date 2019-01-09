@@ -43,10 +43,16 @@ namespace mat
         Matrix& operator/=(const double& num);                                     // M /= num
 
         // 下标索引
-        double *const operator[](const usize& n)const noexcept
+        double *const operator[](const usize& n)noexcept
         {
             return mat_data + n * column;
         }
+        // 常量矩阵禁止修改元素
+        const double *const operator[](const usize& n)const noexcept
+        {
+            return mat_data + n * column;
+        }
+
         double& at(usize m, usize n);
         const double& at(usize m, usize n)const;
 
