@@ -4,6 +4,8 @@
 #include <cmath>
 #include <memory>
 
+#include <iostream>
+
 namespace mat
 {
     // 常规构造: m行数，n列数
@@ -699,24 +701,21 @@ namespace mat
             return std::make_tuple(Matrix(), Matrix(), Matrix());
         }
 
-        // 矩阵不满秩
-        if (this->rank() != this->row)
-        {
-            return std::make_tuple(Matrix(), Matrix(), Matrix());
-        }
-
         const usize N = this->row;  // 方阵维数
-        Matrix P = eye(N, N);       // 置换矩阵
+        Matrix P = eye(N, N);       // 置换矩阵,列交换后的置换矩阵P,作用在矩阵A上，等价于对A进行行交换
         Matrix A(*this);            // 计算结果暂存在矩阵A中
 
         // 每一次循环可计算矩阵L第k行和矩阵U第k列元素, 结果(LU非零元素)暂存到矩阵A中
         for (usize k = 0; k < N; k++)
         {
-            // (1)选主元
+            // (1)选主元(按行)
             usize p_row = k;     // 记录所在的行
+            //usize p_col = k;     // 记录所在的列
+
+            double s_max = 0;
             for (usize i = k; i < N; i++)
             {
-                double s_max = 0;
+                s_max = 0;
                 double a = A[i][k];
                 for (usize t = 0; t < k; t++)
                 {
@@ -724,30 +723,77 @@ namespace mat
                 }
 
                 // 确定主元所在行
-                if (i > k)
+                if (abs(a) > abs(s_max))
                 {
-                    if (abs(a) > abs(s_max))
+                    s_max = a;
+                    if (s_max != 0)
                     {
-                        s_max = a;
                         p_row = i;
                     }
                 }
             }
 
+            //// 选主元(按列)
+            //if (s_max == 0)
+            //{
+            //    for (usize i = k; i < N; i++)
+            //    {
+            //        s_max = 0;
+            //        double a = A[i][k];
+            //        for (usize t = 0; t < k; t++)
+            //        {
+            //            a = a - A[k][t] * A[t][i];
+            //        }
+
+            //        // 确定主元所在行
+            //        if (abs(a) > abs(s_max))
+            //        {
+            //            s_max = a;
+            //            if (s_max != 0)
+            //            {
+            //                p_col = i;
+            //            }
+            //        }
+            //    }
+            //}
+
             // (2)根据主元所在位置进行行交换
             double temp = 0;
-            for (usize j = 0; j < N; j++)
-            {
-                // 置换矩阵(行交换)
-                temp = P[k][j];
-                P[k][j] = P[p_row][j];
-                P[p_row][j] = temp;
 
-                // 矩阵A(行交换)
-                temp = A[k][j];
-                A[k][j] = A[p_row][j];
-                A[p_row][j] = temp;
+            // 矩阵A进行交换
+            // 列交换后的置换矩阵P,作用在矩阵A上，等价于对A进行行交换
+            if (p_row != k)
+            {
+                for (usize j = 0; j < N; j++)
+                {
+                    // 置换矩阵P(列交换)
+                    temp = P[j][k];
+                    P[j][k] = P[j][p_row];
+                    P[j][p_row] = temp;
+
+                    // 矩阵A(行交换)
+                    temp = A[k][j];
+                    A[k][j] = A[p_row][j];
+                    A[p_row][j] = temp;
+                }
             }
+
+            //// 矩阵A进行列交换
+            //if (p_col != k)
+            //{
+            //    for (usize j = 0; j < N; j++)
+            //    {
+            //        // 置换矩阵(行交换)
+            //        temp = P[k][j];
+            //        P[k][j] = P[p_col][j];
+            //        P[p_col][j] = temp;
+
+            //        // 矩阵A(列交换)
+            //        temp = A[k][j];
+            //        A[k][j] = A[k][p_col];
+            //        A[k][p_col] = temp;
+            //    }
+            //}
 
             // (3)计算矩阵L第k行和矩阵U第k列元素
             // 矩阵U第k列

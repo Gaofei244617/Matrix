@@ -31,7 +31,9 @@ int main()
     // 5X5矩阵, rank = 5
     Matrix A = { {1,10,3,6,7}, {-100,5,4,1,9}, {2,0,3,1,1}, {4,4,9,2,0}, {1,5,2,3,4} };
     // 5X5矩阵, rank = 4
-    Matrix B = { {1,10,3,6,7}, {1,10,3,6,7}, {2,0,3,1,1}, {4,4,9,2,0}, {1,5,2,3,4} };
+    //Matrix B = { {1,10,3,6,7}, {1,10,3,6,7}, {2,0,3,1,1}, {4,4,9,2,0}, {1,5,2,3,4} };
+    Matrix B = { {1,10,3,6,7}, {1,10,3,6,7}, {2,0,3,1,1}, {4,4,9,2,0}, {1,10,3,6,7} };
+
     // 4X5矩阵, rank = 4
     Matrix C = { {1,10,3,6,7}, {-100,5,4,1,9}, {2,0,3,1,1}, {4,4,9,2,0} };
     // 5X4矩阵, rank = 4
@@ -41,35 +43,49 @@ int main()
     Matrix b = Matrix({ 1,2,3,4,5 }).trans();
     /****************************************************************************************/
 
-    // 矩阵的秩
-    cout << "rank(A) = " << A.rank() << endl;
+    //// 矩阵的秩
+    //cout << "rank(A) = " << A.rank() << endl;
 
-    // 矩阵的迹
-    cout << "trace(A) = " << A.trace() << endl;
+    //// 矩阵的迹
+    //cout << "trace(A) = " << A.trace() << endl;
 
-    // 行列式
-    cout << "det(A) = " << det(A) << endl;
+    //// 行列式
+    //cout << "det(A) = " << det(A) << endl;
 
-    // 逆矩阵
-    cout << "inv(A) = " << endl;
-    print(inv(A));
+    //// 逆矩阵
+    //cout << "inv(A) = " << endl;
+    //print(inv(A));
 
-    // QR分解
-    cout << "QR Decomposition:" << endl;
-    auto QRVec = QR(A);
-    cout << "Q = " << endl;
+    //// QR分解
+    //cout << "QR Decomposition:" << endl;
+    //auto QRVec = QR(A);
+    //cout << "Q = " << endl;
+    //print(get<0>(QRVec));
+    //cout << "R = " << endl;
+    //print(get<1>(QRVec));
+
+    // LU分解
+    cout << "LU Decomposition:" << endl;
+    auto QRVec = LU(A);
+    cout << "P = " << endl;
     print(get<0>(QRVec));
-    cout << "R = " << endl;
+    cout << "L = " << endl;
     print(get<1>(QRVec));
+    cout << "U = " << endl;
+    print(get<2>(QRVec));
+    cout << "A = " << endl;
+    print(A);
+    cout << "-------------------------------------------------" << endl;
+    print(get<0>(QRVec) * get<1>(QRVec) * get<2>(QRVec));
 
-    // 解线性方程组
-    cout << "方程组的解：" << endl;
-    print(std::get<0>(solve(A, b)));
+    //// 解线性方程组
+    //cout << "方程组的解：" << endl;
+    //print(std::get<0>(solve(A, b)));
 
-    // 特征值
-    cout << "矩阵A的特征值：" << endl;
-    auto val = eig(A);
-    for (auto& v : val) { cout << v << endl; }
+    //// 特征值
+    //cout << "矩阵A的特征值：" << endl;
+    //auto val = eig(A);
+    //for (auto& v : val) { cout << v << endl; }
 
     system("pause");
     return 0;

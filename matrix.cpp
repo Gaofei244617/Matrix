@@ -74,6 +74,12 @@ namespace mat
         return mat.QR();
     }
 
+    // 矩阵LU分解,返回值{P,L,U}
+    std::tuple<Matrix, Matrix, Matrix> LU(const Matrix& mat)
+    {
+        return mat.LU();
+    }
+
     // 矩阵特征值
     std::vector<std::complex<double>> eig(const Matrix& mat, double e)
     {

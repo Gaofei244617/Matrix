@@ -8,6 +8,7 @@
 #include <memory>
 #include <cmath>
 #include <complex>
+#include <functional>
 #include "math_funcs.h"
 
 namespace mat
@@ -79,6 +80,8 @@ namespace mat
         std::vector<std::complex<double>> eig(double e = 0)const;                  // 矩阵特征值
         std::tuple<Matrix, Matrix, Matrix> SVD()const;                             // 奇异值分解，返回S、V、D三个矩阵
         Matrix subMat(usize r1, usize c1, usize r2, usize c2)const;                // 子阵
+        Matrix filter(std::function<bool(double)> f)const;
+        Matrix map(std::function<double(double)> f)const;
 
     private:
         // 矩阵拟上三角分解(A = P*B*P'),P为正交矩阵,B为拟上三角阵

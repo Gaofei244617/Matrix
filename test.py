@@ -42,3 +42,4 @@ P, L, U = linalg.lu(A)               # LU分解
 print(P)
 print(L)
 print(U)
+print(np.matmul(L, U))
