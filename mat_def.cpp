@@ -709,8 +709,7 @@ namespace mat
         for (usize k = 0; k < N; k++)
         {
             // (1)选主元(按行)
-            usize p_row = k;     // 记录所在的行
-            //usize p_col = k;     // 记录所在的列
+            usize p_row = k;        // 记录所在的行
 
             double s_max = 0;
             for (usize i = k; i < N; i++)
@@ -733,30 +732,6 @@ namespace mat
                 }
             }
 
-            //// 选主元(按列)
-            //if (s_max == 0)
-            //{
-            //    for (usize i = k; i < N; i++)
-            //    {
-            //        s_max = 0;
-            //        double a = A[i][k];
-            //        for (usize t = 0; t < k; t++)
-            //        {
-            //            a = a - A[k][t] * A[t][i];
-            //        }
-
-            //        // 确定主元所在行
-            //        if (abs(a) > abs(s_max))
-            //        {
-            //            s_max = a;
-            //            if (s_max != 0)
-            //            {
-            //                p_col = i;
-            //            }
-            //        }
-            //    }
-            //}
-
             // (2)根据主元所在位置进行行交换
             double temp = 0;
 
@@ -777,23 +752,6 @@ namespace mat
                     A[p_row][j] = temp;
                 }
             }
-
-            //// 矩阵A进行列交换
-            //if (p_col != k)
-            //{
-            //    for (usize j = 0; j < N; j++)
-            //    {
-            //        // 置换矩阵(行交换)
-            //        temp = P[k][j];
-            //        P[k][j] = P[p_col][j];
-            //        P[p_col][j] = temp;
-
-            //        // 矩阵A(列交换)
-            //        temp = A[k][j];
-            //        A[k][j] = A[k][p_col];
-            //        A[k][p_col] = temp;
-            //    }
-            //}
 
             // (3)计算矩阵L第k行和矩阵U第k列元素
             // 矩阵U第k列
@@ -1044,6 +1002,40 @@ namespace mat
             throw std::out_of_range("Invalid index of the matrix.");
         }
         return *this;
+    }
+
+    // 行交换(m行,n行)
+    void Matrix::swap_row(const usize& m, const usize& n)
+    {
+        if (m != n)
+        {
+            const usize row = this->row;
+            const usize column = this->column;
+            double temp = 0;
+            for (usize i = 0; i < column; i++)
+            {
+                temp = mat_data[m*column + i];
+                mat_data[m*column + i] = mat_data[n*column + i];
+                mat_data[n*column + i] = temp;
+            }
+        }
+    }
+
+    // 列交换(m列,n列)
+    void Matrix::swap_col(const usize& m, const usize& n)
+    {
+        if (m != n)
+        {
+            const usize row = this->row;
+            const usize column = this->column;
+            double temp = 0;
+            for (usize i = 0; i < row; i++)
+            {
+                temp = mat_data[i*column + m];
+                mat_data[i*column + m] = mat_data[i*column + n];
+                mat_data[i*column + n] = temp;
+            }
+        }
     }
 
     // 全选主元高斯消去
