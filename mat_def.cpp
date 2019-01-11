@@ -3,6 +3,7 @@
 #include "mat_operator.h"
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 
 namespace mat
 {
@@ -809,8 +810,9 @@ namespace mat
     // 求矩阵全部特征值(带双步位移的QR方法), e为精度水平
     std::vector<std::complex<double>> Matrix::eig(double e)const
     {
-        /*QR方法适用于计算一般实矩阵的全部特征值,尤其适用于中小型实矩阵*/
-        /*双步位移可以加速收敛*/
+        /* QR方法适用于计算一般实矩阵的全部特征值,尤其适用于中小型实矩阵 */
+        /* 双步位移可以加速收敛 */
+        /* 计算结果降序排序 */
 
         // 只有非空方阵才能求特征值
         if (this->row != this->column || this->row == 0)
@@ -862,6 +864,9 @@ namespace mat
                 }
             }
         }
+
+        // 对特征值按由大到小排序
+        std::sort(vec.begin(), vec.end(), [](std::complex<double> a, std::complex<double> b) {return norm(a) > norm(b); });
         return vec;
     }
 

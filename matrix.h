@@ -9,8 +9,9 @@ namespace mat
     Matrix getRow(const Matrix& mat, usize n);                                             // 获取行向量
     Matrix getColumn(const Matrix& mat, usize n);                                          // 获取列向量
     std::vector<double> getDiag(const Matrix& mat);                                        // 获取对角元素
-    double normOne(const Matrix& mat);                                                     // 1范数,列和范数
-    double normInf(const Matrix& mat);                                                     // 无穷范数,行和范数
+    double normOne(const Matrix& mat);                                                     // 1范数,列和范数(每一列元素绝对值之和的最大值)
+    double normOne(const Matrix& mat);                                                     // 2范数,列和范数(AA'的最大特征值的平方根)
+    double normInf(const Matrix& mat);                                                     // 无穷范数,行和范数(每一行元素绝对值之和的最大值)
     Matrix trans(const Matrix& mat);                                                       // 矩阵转置
     usize rank(const Matrix& mat);                                                         // 矩阵的秩
     double trace(const Matrix& mat);                                                       // 矩阵的迹
@@ -25,7 +26,7 @@ namespace mat
     Matrix eye(const usize& m, const usize& n);                                            // 单位矩阵
     Matrix ones(const usize& m, const usize& n);                                           // 元素全为1的矩阵
     Matrix zeros(const usize& m, const usize& n);                                          // 元素全为0的矩阵
-    Matrix rand(const usize& m, const usize& n);                                           // // 随机矩阵, 元素取值[0, 1.0)
+    Matrix rand(const usize& m, const usize& n);                                           // 随机矩阵, 元素取值[0, 1.0)
     Matrix diag(const std::initializer_list<double>& nums);                                // 以向量为对角元素生成方阵
     Matrix rbind(const std::initializer_list<Matrix>& M);                                  // [M1; M2; ...], 需要列数相等
     Matrix cbind(const std::initializer_list<Matrix>& M);                                  // [M1, M2, ...], 需要行数相等

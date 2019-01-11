@@ -66,28 +66,28 @@ int main()
     //cout << "R = " << endl;
     //print(get<1>(QRVec));
 
-    // LU分解
-    cout << "LU Decomposition:" << endl;
-    auto QRVec = LU(B);
-    cout << "P = " << endl;
-    print(get<0>(QRVec));
-    cout << "L = " << endl;
-    print(get<1>(QRVec));
-    cout << "U = " << endl;
-    print(get<2>(QRVec));
-    cout << "A = " << endl;
-    print(B);
-    cout << "-------------------------------------------------" << endl;
-    print(get<0>(QRVec) * get<1>(QRVec) * get<2>(QRVec));
+    //// LU分解
+    //cout << "LU Decomposition:" << endl;
+    //auto QRVec = LU(B);
+    //cout << "P = " << endl;
+    //print(get<0>(QRVec));
+    //cout << "L = " << endl;
+    //print(get<1>(QRVec));
+    //cout << "U = " << endl;
+    //print(get<2>(QRVec));
+    //cout << "A = " << endl;
+    //print(B);
+    //cout << "-------------------------------------------------" << endl;
+    //print(get<0>(QRVec) * get<1>(QRVec) * get<2>(QRVec));
 
     //// 解线性方程组
     //cout << "方程组的解：" << endl;
     //print(std::get<0>(solve(A, b)));
 
-    //// 特征值
-    //cout << "矩阵A的特征值：" << endl;
-    //auto val = eig(A);
-    //for (auto& v : val) { cout << v << endl; }
+    // 特征值
+    cout << "矩阵A的特征值：" << endl;
+    auto val = eig(A);
+    for (auto& v : val) { cout << v << endl; }
 
     system("pause");
     return 0;
