@@ -1013,6 +1013,41 @@ namespace mat
         return *this;
     }
 
+    // 高阶函数-filter
+    Matrix Matrix::filter(std::function<bool(double)> f)const
+    {
+        const usize row = this->row;
+        const usize column = this->column;
+        Matrix M(row, column);
+        for (usize i = 0; i < row; i++)
+        {
+            for (usize j = 0; j < column; j++)
+            {
+                if (f((*this)[i][j]))
+                {
+                    M[i][j] = 1.0;
+                }
+            }
+        }
+        return M;
+    }
+
+    // 高阶函数-map
+    Matrix Matrix::map(std::function<double(double)> f)const
+    {
+        const usize row = this->row;
+        const usize column = this->column;
+        Matrix M(row, column);
+        for (usize i = 0; i < row; i++)
+        {
+            for (usize j = 0; j < column; j++)
+            {
+                M[i][j] = f((*this)[i][j]);
+            }
+        }
+        return M;
+    }
+
     // 行交换(m行,n行)
     void Matrix::swap_row(const usize& m, const usize& n)
     {
