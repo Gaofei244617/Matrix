@@ -2,8 +2,6 @@
 #include "matrix.h"
 #include "mat_operator.h"
 #include <cmath>
-#include <memory>
-
 #include <iostream>
 
 namespace mat
@@ -695,33 +693,51 @@ namespace mat
     /* 矩阵LU分解(Doolittle分解, A = LU), L为下三角阵(主对角元素为1), U为上三角矩阵 */
     std::tuple<Matrix, Matrix, Matrix> Matrix::LU()const
     {
-        // LU分解只针对方阵
-        if (this->row != this->column)
+        /* 不要求矩阵满秩，亦不要求矩阵为方阵 */
+
+        // 如果是空矩阵
+        if (this->row == 0 || this->column == 0)
         {
             return std::make_tuple(Matrix(), Matrix(), Matrix());
         }
 
-        const usize N = this->row;  // 方阵维数
-        Matrix P = eye(N, N);       // 置换矩阵,列交换后的置换矩阵P,作用在矩阵A上，等价于对A进行行交换
-        Matrix A(*this);            // 计算结果暂存在矩阵A中
+        const usize row = this->row;
+        const usize column = this->column;
+        const usize N = row > column ? row : column;    // 矩阵行数
+
+        Matrix P = eye(row, row);                       // 置换矩阵,列交换后的置换矩阵P,作用在矩阵A上，等价于对A进行行交换
+        Matrix A(N, N);                                 // 计算结果暂存在矩阵A中
+
+        // 初始化矩阵A
+        for (usize i = 0; i < row; i++)
+        {
+            for (usize j = 0; j < column; j++)
+            {
+                A[i][j] = (*this)[i][j];
+            }
+        }
+
+        usize p_row;                                    // 记录主元所在的行
+        double s_max;                                   // 选主元的依据
+        double a;
+
+        const double e = this->normOne() * (1.0e-10);   // 定义一个极小值
 
         // 每一次循环可计算矩阵L第k行和矩阵U第k列元素, 结果(LU非零元素)暂存到矩阵A中
         for (usize k = 0; k < N; k++)
         {
-            // (1)选主元(按行)
-            usize p_row = k;        // 记录所在的行
-
-            double s_max = 0;
+            // (1)全选主元
+            p_row = k;        // 记录主元所在的行
+            s_max = 0;
             for (usize i = k; i < N; i++)
             {
-                s_max = 0;
-                double a = A[i][k];
+                a = A[i][k];
                 for (usize t = 0; t < k; t++)
                 {
                     a = a - A[i][t] * A[t][k];
                 }
 
-                // 确定主元所在行
+                // 确定主元所在行和列
                 if (abs(a) > abs(s_max))
                 {
                     s_max = a;
@@ -732,26 +748,10 @@ namespace mat
                 }
             }
 
-            // (2)根据主元所在位置进行行交换
-            double temp = 0;
-
-            // 矩阵A进行交换
+            // (2)根据主元所在位置进行行交换和列交换
             // 列交换后的置换矩阵P,作用在矩阵A上，等价于对A进行行交换
-            if (p_row != k)
-            {
-                for (usize j = 0; j < N; j++)
-                {
-                    // 置换矩阵P(列交换)
-                    temp = P[j][k];
-                    P[j][k] = P[j][p_row];
-                    P[j][p_row] = temp;
-
-                    // 矩阵A(行交换)
-                    temp = A[k][j];
-                    A[k][j] = A[p_row][j];
-                    A[p_row][j] = temp;
-                }
-            }
+            A.swap_row(p_row, k);
+            P.swap_col(p_row, k);
 
             // (3)计算矩阵L第k行和矩阵U第k列元素
             // 矩阵U第k列
@@ -767,23 +767,32 @@ namespace mat
             // 矩阵L第k行
             for (usize i = k + 1; i < N; i++)
             {
-                double temp_L = A[i][k];
-                for (usize t = 0; t < k; t++)
+                // 考虑除数为0的情况,除数为0说明矩阵不满秩
+                if (abs(A[k][k]) > e)
                 {
-                    temp_L = temp_L - A[i][t] * A[t][k];
+                    double temp_L = A[i][k];
+                    for (usize t = 0; t < k; t++)
+                    {
+                        temp_L = temp_L - A[i][t] * A[t][k];
+                    }
+                    A[i][k] = temp_L / A[k][k];
                 }
-                A[i][k] = temp_L / A[k][k];
+                else
+                {
+                    A[i][k] = 0;
+                }
             }
         }
 
-        Matrix L = eye(N, N);       // 下三角矩阵(主对角元素为1)
-        Matrix U(N, N);             // 上三角矩阵
+        const usize min = row < column ? row : column;    // 矩阵行数
+        Matrix L = eye(row, min);          // 下三角矩阵(主对角元素为1)
+        Matrix U(min, column);             // 上三角矩阵
 
         // 生成矩阵L和U
-        for (usize i = 0; i < N; i++)
+        for (usize i = 0; i < row; i++)
         {
             // 上三角阵U
-            for (usize j = i; j < N; j++)
+            for (usize j = i; j < column; j++)
             {
                 U[i][j] = A[i][j];
             }

@@ -18,8 +18,8 @@ namespace mat
     class Matrix
     {
     private:
-        usize row;                                                           // 行数
-        usize column;                                                        // 列数
+        usize row;                                                                 // 行数
+        usize column;                                                              // 列数
         double* mat_data;                                                          // 采用一维数组存储元素
 
     public:
@@ -67,8 +67,9 @@ namespace mat
         Matrix getRow(usize n)const;                                               // 获取行向量
         Matrix getColumn(usize n)const;                                            // 获取列向量
         std::vector<double> getDiag()const;                                        // 获取对角元素
-        double normOne()const;                                                     // 1范数,列和范数
-        double normInf()const;                                                     // 无穷范数,行和范数
+        double normOne()const;                                                     // 1范数,列和范数(每一列元素绝对值之和的最大值)
+        double normTwo()const;                                                     // 2范数,谱范数(AA'的最大特征值的平方根)
+        double normInf()const;                                                     // 无穷范数,行和范数(每一行元素绝对值之和的最大值)
         Matrix trans()const;                                                       // 矩阵转置
 
         usize rank()const;                                                         // 矩阵的秩
@@ -82,14 +83,14 @@ namespace mat
         Matrix subMat(usize r1, usize c1, usize r2, usize c2)const;                // 子阵
         Matrix filter(std::function<bool(double)> f)const;
         Matrix map(std::function<double(double)> f)const;
-
-    private:
         // 行交换
         void swap_row(const usize& r1, const usize& r2);
-        
+
         // 列交换
         void swap_col(const usize& r1, const usize& r2);
-        
+
+    private:
+
         // 矩阵拟上三角分解(A = P*B*P'),P为正交矩阵,B为拟上三角阵
         Matrix hess2()const;
 
