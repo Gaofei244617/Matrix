@@ -117,6 +117,21 @@ namespace mat
         return Matrix(m, n);
     }
 
+    // 随机矩阵, 元素取值[0, 1.0)
+    Matrix rand(const usize& m, const usize& n)
+    {
+        Matrix M(m, n);
+        for (usize i = 0; i < m; i++)
+        {
+            for (usize j = 0; j < n; j++)
+            {
+                M[i][j] = random_real();
+            }
+        }
+
+        return M;
+    }
+
     // 以向量为对角元素生成方阵
     Matrix diag(const std::initializer_list<double>& nums)
     {

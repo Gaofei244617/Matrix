@@ -25,7 +25,7 @@ namespace mat
     Matrix eye(const usize& m, const usize& n);                                            // 单位矩阵
     Matrix ones(const usize& m, const usize& n);                                           // 元素全为1的矩阵
     Matrix zeros(const usize& m, const usize& n);                                          // 元素全为0的矩阵
-    Matrix rand(const usize& m, const usize& n);                                           // 随机矩阵, 元素取值[0~1]
+    Matrix rand(const usize& m, const usize& n);                                           // // 随机矩阵, 元素取值[0, 1.0)
     Matrix diag(const std::initializer_list<double>& nums);                                // 以向量为对角元素生成方阵
     Matrix rbind(const std::initializer_list<Matrix>& M);                                  // [M1; M2; ...], 需要列数相等
     Matrix cbind(const std::initializer_list<Matrix>& M);                                  // [M1, M2, ...], 需要行数相等

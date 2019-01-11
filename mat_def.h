@@ -83,13 +83,13 @@ namespace mat
         Matrix subMat(usize r1, usize c1, usize r2, usize c2)const;                // 子阵
         Matrix filter(std::function<bool(double)> f)const;                         // 高阶函数-filter
         Matrix map(std::function<double(double)> f)const;                          // 高阶函数-map
+
+    private:
         // 行交换
         void swap_row(const usize& r1, const usize& r2);
 
         // 列交换
         void swap_col(const usize& r1, const usize& r2);
-
-    private:
 
         // 矩阵拟上三角分解(A = P*B*P'),P为正交矩阵,B为拟上三角阵
         Matrix hess2()const;
