@@ -84,6 +84,12 @@ namespace mat
         Matrix map(std::function<double(double)> f)const;
 
     private:
+        // 行交换
+        void swap_row(const usize& r1, const usize& r2);
+        
+        // 列交换
+        void swap_col(const usize& r1, const usize& r2);
+        
         // 矩阵拟上三角分解(A = P*B*P'),P为正交矩阵,B为拟上三角阵
         Matrix hess2()const;
 
