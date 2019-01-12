@@ -68,7 +68,11 @@ namespace mat
         Matrix getColumn(usize n)const;                                            // 获取列向量
         std::vector<double> getDiag()const;                                        // 获取对角元素
         Matrix rbind(const Matrix& M)const;                                        // [M1; M2; ...], 需要列数相等
+        template<class T, class ...Args>
+        Matrix rbind(const T& M, Args... args)const;                               // [M1, M2, ...], 需要行数相等
         Matrix cbind(const Matrix& M)const;                                        // [M1, M2, ...], 需要行数相等
+        template<class T, class ...Args>
+        Matrix cbind(const T& M, Args... args)const;                               // [M1, M2, ...], 需要行数相等
         Matrix subMat(usize r1, usize c1, usize r2, usize c2)const;                // 子阵
 
         Matrix trans()const;                                                       // 矩阵转置
@@ -112,7 +116,6 @@ namespace mat
         friend std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b);
 
         // 加法运算
-        friend Matrix operator+(const Matrix& m);                                  // +M
         friend Matrix operator+(const Matrix& m1, const Matrix& m2);               // M + M
         friend Matrix& operator+(const Matrix& m1, Matrix&& m2);                   // M + move(M)
         friend Matrix& operator+(Matrix&& m1, const Matrix& m2);                   // move(M) + M
@@ -137,7 +140,6 @@ namespace mat
         friend Matrix operator*(const Matrix& m1, const Matrix& m2);               // M * M
         friend Matrix operator*(const Matrix& m, const double& num);               // M * num
         friend Matrix& operator*(Matrix&& m, const double& num);                   // move(M) * num
-        friend Matrix& operator*(Matrix&& m1, Matrix&& m2);                        // move(M) * move(M)
         friend Matrix operator*(const double& num, const Matrix& m);               // num * M
         friend Matrix& operator*(const double& num, Matrix&& m);                   // num * move(M)
 
@@ -147,8 +149,22 @@ namespace mat
 
         // 逻辑运算符
         friend bool operator==(const Matrix& m1, const Matrix& m2)noexcept;        // 等于
-        friend bool operator!=(const Matrix& m1, const Matrix& m2)noexcept;        // 不等于
     };
+
+    /***************************************** 函数模板 ***************************************************************/
+    // [M1, M2, ...], 需要行数相等
+    template<class T, class ...Args>
+    Matrix Matrix::rbind(const T& M, Args... args)const
+    {
+        return this->rbind(M).rbind(args...);
+    }
+
+    // [M1, M2, ...], 需要行数相等
+    template<class T, class ...Args>
+    Matrix Matrix::cbind(const T& M, Args... args)const
+    {
+        return this->cbind(M).cbind(args...);
+    }
 }
 
 #endif

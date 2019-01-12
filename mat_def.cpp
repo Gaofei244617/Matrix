@@ -507,6 +507,28 @@ namespace mat
         return Matrix();
     }
 
+    // 子阵,形参为左上角元素位置和右下角元素位置
+    Matrix Matrix::subMat(usize r1, usize c1, usize r2, usize c2)const
+    {
+        if (r2 < this->row && c2 < this->column && r1 <= r2 && c1 <= c2)
+        {
+            Matrix matrix(r2 - r1 + 1, c2 - c1 + 1);
+            for (usize i = r1; i <= r2; i++)
+            {
+                for (usize j = c1; j <= c2; j++)
+                {
+                    matrix.mat_data[(i - r1)*matrix.column + j - c1] = this->mat_data[i*column + j];
+                }
+            }
+            return matrix;
+        }
+        else
+        {
+            throw std::out_of_range("Invalid index of the matrix.");
+        }
+        return *this;
+    }
+
     // 1范数(列和范数)
     double Matrix::normOne()const
     {
@@ -1066,28 +1088,6 @@ namespace mat
         else
         {
             throw std::length_error("Number of rows must equal columns.");
-        }
-        return *this;
-    }
-
-    // 子阵,形参为左上角元素位置和右下角元素位置
-    Matrix Matrix::subMat(usize r1, usize c1, usize r2, usize c2)const
-    {
-        if (r2 < this->row && c2 < this->column && r1 <= r2 && c1 <= c2)
-        {
-            Matrix matrix(r2 - r1 + 1, c2 - c1 + 1);
-            for (usize i = r1; i <= r2; i++)
-            {
-                for (usize j = c1; j <= c2; j++)
-                {
-                    matrix.mat_data[(i - r1)*matrix.column + j - c1] = this->mat_data[i*column + j];
-                }
-            }
-            return matrix;
-        }
-        else
-        {
-            throw std::out_of_range("Invalid index of the matrix.");
         }
         return *this;
     }

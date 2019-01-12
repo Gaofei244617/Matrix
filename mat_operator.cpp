@@ -315,10 +315,6 @@ namespace mat
         }
         return m;
     }
-    Matrix& operator*(Matrix&& m1, Matrix&& m2)
-    {
-        return m1 = std::move(m1) * m2;
-    }
     Matrix operator*(const double& num, const Matrix& m)
     {
         Matrix matrix(m.row, m.column);

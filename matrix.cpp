@@ -143,110 +143,6 @@ namespace mat
         return matrix;
     }
 
-    // [M1; M2; ...], 需要列数相等
-    Matrix rbind(const std::initializer_list<Matrix>& M)
-    {
-        usize count = M.size();
-        if (count > 0)
-        {
-            usize row;       // 拼接后矩阵的行数
-            usize column;    // 拼接后矩阵的列数（拼接前后保持不变）
-
-            usize temp_row = 0;
-            usize temp_column = 0;
-
-            std::tie(row, column) = (*(M.begin())).size(); // 第一个矩阵的行列数
-
-            // 计算拼接后矩阵的行数, 并判断矩阵是否可拼接
-            for (usize i = 1; i < count; i++)
-            {
-                std::tie(temp_row, temp_column) = (*(M.begin() + i)).size();
-
-                row += temp_row;
-
-                // 列数不相同, 不能拼接
-                if (temp_column != column)
-                {
-                    throw std::length_error("Dimensions do not match.");
-                    return Matrix();
-                }
-            }
-
-            // 拼接矩阵 [M1; M2; ...]
-            Matrix matrix(row, column);
-
-            // 进行矩阵拼接
-            size_t p = 0;
-            for (usize i = 0; i < count; i++)
-            {
-                temp_row = std::get<0>((*(M.begin() + i)).size());
-
-                for (usize j = 0; j < temp_row; j++)
-                {
-                    for (usize k = 0; k < column; k++)
-                    {
-                        matrix[j + p][k] = (*(M.begin() + i))[j][k];
-                    }
-                }
-                p += temp_row;
-            }
-            return matrix;
-        }
-        return Matrix();
-    }
-
-    // [M1, M2, ...], 需要行数相等
-    Matrix cbind(const std::initializer_list<Matrix>& M)
-    {
-        usize count = M.size();
-        if (count > 0)
-        {
-            usize row;       // 拼接后矩阵的行数（拼接前后保持不变）
-            usize column;    // 拼接后矩阵的列数
-
-            usize temp_row = 0;
-            usize temp_column = 0;
-
-            std::tie(row, column) = (*(M.begin())).size(); // 第一个矩阵的行列数
-
-            // 判断矩阵是否可拼接,并计算拼接后矩阵的行数
-            for (usize i = 1; i < count; i++)
-            {
-                std::tie(temp_row, temp_column) = (*(M.begin() + i)).size();
-
-                column += temp_column;
-                // 行数不同，不能拼接
-                if (temp_row != row)
-                {
-                    throw std::length_error("Dimensions do not match.");
-                    return Matrix();
-                }
-            }
-
-            Matrix matrix(row, column);
-
-            // 拼接矩阵 [M1, M2, ...]
-            size_t p = 0;
-            for (usize i = 0; i < count; i++)
-            {
-                temp_column = std::get<1>((*(M.begin() + i)).size());
-
-                for (usize j = 0; j < row; j++)
-                {
-                    for (usize k = 0; k < temp_column; k++)
-                    {
-                        matrix[j][k + p] = (*(M.begin() + i))[j][k];
-                    }
-                }
-
-                p += temp_column;
-            }
-            return matrix;
-        }
-
-        return Matrix();
-    }
-
     // 求解线性方程组: Ax = b
     std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b)
     {
@@ -272,7 +168,8 @@ namespace mat
         std::unique_ptr<usize[]>& R = std::get<1>(temp);           // 行交换信息
         std::unique_ptr<usize[]>& C = std::get<2>(temp);           // 列交换信息
         usize rankA = std::get<3>(temp);                           // 系数矩阵的秩rank(A)
-        usize rankAb = cbind({ A, b }).rank();                     // rank(A,b)
+        usize rankAb = A.cbind(b).rank();                          // rank(A,b)
+
         usize n = A.column;                                        // 未知数个数
         Matrix& vec = std::get<4>(temp);                           // 高斯消元后方程组的目标向量
 

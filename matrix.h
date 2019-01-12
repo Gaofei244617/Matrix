@@ -21,17 +21,32 @@ namespace mat
     std::tuple<Matrix, Matrix, Matrix> LU(const Matrix& mat);                              // 矩阵LU分解,返回值{P,L,U}
     std::vector<std::complex<double>> eig(const Matrix& mat, double e = 0);                // 矩阵特征值
     std::tuple<Matrix, Matrix, Matrix> SVD(const Matrix& mat);                             // 奇异值分解，返回S、V、D三个矩阵
-    Matrix subMat(const Matrix& mat, usize r1, usize c1, usize r2, usize c2);              // 子阵
 
     Matrix eye(const usize& m, const usize& n);                                            // 单位矩阵
     Matrix ones(const usize& m, const usize& n);                                           // 元素全为1的矩阵
     Matrix zeros(const usize& m, const usize& n);                                          // 元素全为0的矩阵
     Matrix rand(const usize& m, const usize& n);                                           // 随机矩阵, 元素取值[0, 1.0)
     Matrix diag(const std::initializer_list<double>& nums);                                // 以向量为对角元素生成方阵
-    Matrix rbind(const std::initializer_list<Matrix>& M);                                  // [M1; M2; ...], 需要列数相等
-    Matrix cbind(const std::initializer_list<Matrix>& M);                                  // [M1, M2, ...], 需要行数相等
+    template<class T, class... Args> Matrix rbind(const T& M, Args... args);               // [M1; M2; ...], 需要列数相等
+    template<class T, class... Args> Matrix cbind(const T& M, Args... args);               // [M1, M2, ...], 需要行数相等
+    Matrix subMat(const Matrix& mat, usize r1, usize c1, usize r2, usize c2);              // 子阵
 
     std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b);                        // 求解线性方程组 Ax = b
+
+    /******************************************** 函数模板 ****************************************************************/
+    // [M1; M2; ...], 需要列数相等
+    template<class T, class... Args>
+    Matrix rbind(const T& M, Args... args)
+    {
+        return M.rbind(args...);
+    }
+
+    // [M1, M2, ...], 需要行数相等
+    template<class T, class... Args>
+    Matrix cbind(const T& M, Args... args)
+    {
+        return M.cbind(args...);
+    }
 }
 
 #endif

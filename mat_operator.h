@@ -31,7 +31,6 @@ namespace mat
     Matrix operator*(const Matrix& m1, const Matrix& m2);               // M * M
     Matrix operator*(const Matrix& m, const double& num);               // M * num
     Matrix& operator*(Matrix&& m, const double& num);                   // move(M) * num
-    Matrix& operator*(Matrix&& m1, Matrix&& m2);                        // move(M) * move(M)
     Matrix operator*(const double& num, const Matrix& m);               // num * M
     Matrix& operator*(const double& num, Matrix&& m);                   // num * move(M)
 
