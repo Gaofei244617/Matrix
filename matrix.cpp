@@ -128,7 +128,6 @@ namespace mat
                 M[i][j] = random_real();
             }
         }
-
         return M;
     }
 

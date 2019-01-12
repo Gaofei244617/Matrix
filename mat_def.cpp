@@ -529,6 +529,17 @@ namespace mat
         return norm;
     }
 
+    // 2范数,谱范数(AA'的最大特征值的平方根)
+    double Matrix::normTwo()const
+    {
+        auto vec = ((*this)*(this->trans())).eig();
+        if (vec.size() > 0)
+        {
+            return std::abs(vec[0]);
+        }
+        return 0;
+    }
+
     // 无穷范数(行和范数)
     double Matrix::normInf()const
     {
