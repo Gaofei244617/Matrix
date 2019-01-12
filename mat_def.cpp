@@ -445,6 +445,68 @@ namespace mat
         return vec;
     }
 
+    // [M1; M2; ...], 需要列数相等
+    Matrix Matrix::rbind(const Matrix& M)const
+    {
+        if (this->column == M.column)
+        {
+            const usize COL = this->column;
+            const usize ROW = this->row + M.row;
+            Matrix MAT(ROW, COL);
+            for (usize i = 0; i < this->row; i++)
+            {
+                for (usize j = 0; j < COL; j++)
+                {
+                    MAT[i][j] = (*this)[i][j];
+                }
+            }
+            for (usize i = this->row; i < ROW; i++)
+            {
+                for (usize j = 0; j < COL; j++)
+                {
+                    MAT[i][j] = M[i - this->row][j];
+                }
+            }
+            return MAT;
+        }
+        else
+        {
+            throw std::length_error("Dimensions do not match.");
+        }
+        return Matrix();
+    }
+
+    // [M1, M2, ...], 需要行数相等
+    Matrix Matrix::cbind(const Matrix& M)const
+    {
+        if (this->row == M.row)
+        {
+            const usize ROW = this->row;
+            const usize COL = this->column + M.column;
+            Matrix MAT(ROW, COL);
+            for (usize i = 0; i < ROW; i++)
+            {
+                for (usize j = 0; j < this->column; j++)
+                {
+                    MAT[i][j] = (*this)[i][j];
+                }
+            }
+            for (usize i = 0; i < ROW; i++)
+            {
+                for (usize j = this->column; j < COL; j++)
+                {
+                    MAT[i][j] = M[i][j - this->column];
+                }
+            }
+            return MAT;
+        }
+        else
+        {
+            throw std::length_error("Dimensions do not match.");
+        }
+        return Matrix();
+    }
+
     // 1范数(列和范数)
     double Matrix::normOne()const
     {
@@ -866,7 +928,8 @@ namespace mat
         }
 
         // 对特征值按由大到小排序
-        std::sort(vec.begin(), vec.end(), [](std::complex<double> a, std::complex<double> b) {return norm(a) > norm(b); });
+        auto f = [](std::complex<double> a, std::complex<double> b) {return norm(a) > norm(b); };
+        std::sort(vec.begin(), vec.end(), f);
         return vec;
     }
 

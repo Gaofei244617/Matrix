@@ -84,10 +84,10 @@ int main()
     //cout << "方程组的解：" << endl;
     //print(std::get<0>(solve(A, b)));
 
-    // 特征值
-    cout << "矩阵A的特征值：" << endl;
-    auto val = eig(A);
-    for (auto& v : val) { cout << v << endl; }
+    //// 特征值
+    //cout << "矩阵A的特征值：" << endl;
+    //auto val = eig(A);
+    //for (auto& v : val) { cout << v << endl; }
 
     system("pause");
     return 0;
