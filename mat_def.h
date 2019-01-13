@@ -26,7 +26,6 @@ namespace mat
         // 构造函数
         Matrix();
         Matrix(const usize& m, const usize& n);                                    // 常规构造: m行数，n列数
-        Matrix(const std::initializer_list<double>& m);                            // 列表构造
         Matrix(const std::initializer_list<std::initializer_list<double>>& m);     // 列表构造
         Matrix(const Matrix& other);                                               // 拷贝构造
         Matrix(Matrix&& other);                                                    // 移动构造
@@ -69,10 +68,10 @@ namespace mat
         std::vector<double> getDiag()const;                                        // 获取对角元素
         Matrix rbind(const Matrix& M)const;                                        // [M1; M2; ...], 需要列数相等
         template<class T, class ...Args>
-        Matrix rbind(const T& M, Args... args)const;                               // [M1, M2, ...], 需要行数相等
+        Matrix rbind(const T& M, const Args&... args)const;                        // [M1, M2, ...], 需要行数相等
         Matrix cbind(const Matrix& M)const;                                        // [M1, M2, ...], 需要行数相等
         template<class T, class ...Args>
-        Matrix cbind(const T& M, Args... args)const;                               // [M1, M2, ...], 需要行数相等
+        Matrix cbind(const T& M, const Args&... args)const;                        // [M1, M2, ...], 需要行数相等
         Matrix subMat(usize r1, usize c1, usize r2, usize c2)const;                // 子阵
 
         Matrix trans()const;                                                       // 矩阵转置
@@ -154,14 +153,14 @@ namespace mat
     /***************************************** 函数模板 ***************************************************************/
     // [M1, M2, ...], 需要行数相等
     template<class T, class ...Args>
-    Matrix Matrix::rbind(const T& M, Args... args)const
+    Matrix Matrix::rbind(const T& M, const Args&... args)const
     {
         return this->rbind(M).rbind(args...);
     }
 
     // [M1, M2, ...], 需要行数相等
     template<class T, class ...Args>
-    Matrix Matrix::cbind(const T& M, Args... args)const
+    Matrix Matrix::cbind(const T& M, const Args&... args)const
     {
         return this->cbind(M).cbind(args...);
     }

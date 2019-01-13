@@ -27,8 +27,8 @@ namespace mat
     Matrix zeros(const usize& m, const usize& n);                                          // 元素全为0的矩阵
     Matrix rand(const usize& m, const usize& n);                                           // 随机矩阵, 元素取值[0, 1.0)
     Matrix diag(const Matrix& vec);                                                        // 以向量为对角元素生成方阵
-    template<class T, class... Args> Matrix rbind(const T& M, Args... args);               // [M1; M2; ...], 需要列数相等
-    template<class T, class... Args> Matrix cbind(const T& M, Args... args);               // [M1, M2, ...], 需要行数相等
+    template<class T, class... Args> Matrix rbind(const T& M, const Args&... args);        // [M1; M2; ...], 需要列数相等
+    template<class T, class... Args> Matrix cbind(const T& M, const Args&... args);        // [M1, M2, ...], 需要行数相等
     Matrix subMat(const Matrix& mat, usize r1, usize c1, usize r2, usize c2);              // 子阵
 
     std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b);                        // 求解线性方程组 Ax = b
@@ -36,14 +36,14 @@ namespace mat
     /******************************************** 函数模板 ****************************************************************/
     // [M1; M2; ...], 需要列数相等
     template<class T, class... Args>
-    Matrix rbind(const T& M, Args... args)
+    Matrix rbind(const T& M, const Args&... args)
     {
         return M.rbind(args...);
     }
 
     // [M1, M2, ...], 需要行数相等
     template<class T, class... Args>
-    Matrix cbind(const T& M, Args... args)
+    Matrix cbind(const T& M, const Args&... args)
     {
         return M.cbind(args...);
     }

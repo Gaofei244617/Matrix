@@ -18,7 +18,8 @@ Matrix(Matrix&& other);                                                  // ç§»å
 ```cpp
 Matrix A;
 Matrix B(2,3);
-Matrix C({1,2,3});
+Matrix C1({{1,2,3}});
+Matrix C2({{1},{2},{3}});
 Matrix D({1,2,3},{4,5,6});
 Matrix E(D);
 ```
@@ -30,27 +31,35 @@ A = (),
 B = \left(
 \begin{matrix}
    0 & 0 & 0 \\
-   0 & 0 & 0 
+   0 & 0 & 0
   \end{matrix}
 \right),
 \quad
-C = \left(
+C1 = \left(
 \begin{matrix}
-   1 & 2 & 3 
+   1 & 2 & 3
+  \end{matrix}
+\right),
+\quad
+C2 = \left(
+\begin{matrix}
+   1 \\
+   2 \\
+   3
   \end{matrix}
 \right),
 \quad
 D = \left(
 \begin{matrix}
    1 & 2 & 3 \\
-   4 & 5 & 6 
+   4 & 5 & 6
   \end{matrix}
 \right),
 \quad
 E = \left(
 \begin{matrix}
    1 & 2 & 3 \\
-   4 & 5 & 6 
+   4 & 5 & 6
   \end{matrix}
 \right)
 $$

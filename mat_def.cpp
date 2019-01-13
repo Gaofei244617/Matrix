@@ -18,21 +18,6 @@ namespace mat
             column = n;
         }
     }
-    Matrix::Matrix(const std::initializer_list<double>& m) : row(0), column(0), mat_data(nullptr)
-    {
-        usize length = m.size();
-        if (length > 0)
-        {
-            mat_data = new double[length];
-            this->row = 1;
-            this->column = length;
-
-            for (size_t i = 0; i < length; i++)
-            {
-                mat_data[i] = *(m.begin() + i);
-            }
-        }
-    }
     Matrix::Matrix(const std::initializer_list<std::initializer_list<double>>& m) :row(0), column(0), mat_data(nullptr)
     {
         usize row = m.size();
