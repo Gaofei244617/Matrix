@@ -66,12 +66,12 @@ $$
 
 ### 常用构造
 
-* `Matrix eye(const usize& m, const usize& n)`
-* `Matrix ones(const usize& m, const usize& n)`
-* `Matrix zeros(const usize& m, const usize& n)`
-* `Matrix rand(const usize& m, const usize& n)`
-* `Matrix diag(const Matrix& vec)`
-* `Matrix subMat()`
+* `eye`
+* `ones`
+* `zeros`
+* `rand`
+* `diag`
+* `subMat`
 
 ### 元素索引
 
@@ -106,26 +106,38 @@ $
 
 ### 矩阵基本操作
 
-* `size()`
-* `Matrix getRow(usize n)`
-* `Matrix getColumn(usize n)`
-* `std::vector<double> getDiag()`
-* `Matrix rbind(Matrix& M1, [M2, M3,...])`
-* `Matrix cbind(Matrix& M1, [M2, M3,...])`
-* `Matrix subMat(usize r1, usize c1, usize r2, usize c2)`
-* `Matrix trans()`
-* `size_t rank()`
-* `double trace()`
-* `Matrix inv()`
-* `double det()`
-* `double normOne(), double normTwo(), double normInf()`
-* `std::vector<std::complex<double>> eig()`
-* `solve()`
-* `Matrix filter()`
-* `Matrix map(std::function<double(double)> f)`
+* `size`
+**功能：** 获取矩阵行数和列数
+**函数原型：** `const std::pair<usize, usize> size(const Matrix& mat)`
+**输入：** 矩阵行数
+**返回：** 行向量
+**示例：** `auto a = MAT.size();` or `auto a = size(MAT);`
+
+* `getRow`
+**功能：** 获取矩阵行向量
+**函数原型：** `Matrix getRow(usize n)`
+**输入：** 矩阵行数
+**返回：** 行向量
+**示例：** `Matrix vec = MAT.getRow(0);` or `Matrix vec = getRow(MAT, 0);`
+
+* `Matrix getColumn`
+* `getDiag`
+* `rbind`
+* `cbind`
+* `subMat`
+* `trans`
+* `rank`
+* `trace`
+* `inv`
+* `det`
+* `normOne, normTwo, normInf`
+* `eig`
+* `solve`
+* `filter`
+* `map`
 
 ### 矩阵分解
 
-* `std::pair<Matrix, Matrix> QR()`
-* `std::tuple<Matrix, Matrix, Matrix> LU()`
-* `std::tuple<Matrix, Matrix, Matrix> SVD()`
+* **QR分解**
+* **LU分解(Doolittle分解)**
+* **SVD分解**
