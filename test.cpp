@@ -38,7 +38,6 @@ int main()
     Matrix B2 = { 11, 11, 11, 11, 11 };
     Matrix B3 = { 22, 22, 22, 22, 22 };
     Matrix B4 = { 33, 33, 33, 33, 33 };
-    Matrix B5 = { 44, 44, 44, 44, 44 };
 
     // 4X5矩阵, rank = 4
     Matrix C = { {1,10,3,6,7}, {-100,5,4,1,9}, {2,0,3,1,1}, {4,4,9,2,0} };
@@ -93,13 +92,17 @@ int main()
     //auto val = eig(A);
     //for (auto& v : val) { cout << v << endl; }
 
-    print(A);
-    cout << "-------------------------------------------------" << endl;
-    //print(A.cbind(B2.trans(), B3.trans(), B4.trans(), B5.trans()));
-    print(cbind(A, B2.trans(), B3.trans(), B4.trans(), B5.trans()));
-    cout << "-------------------------------------------------" << endl;
-    //print(A.rbind(B2, B3, B4, B5));
-    print(rbind(A, B2, B3, B4, B5));
+    //// 矩阵拼接
+    //print(A);
+    //cout << "-------------------------------------------------" << endl;
+    ////print(A.cbind(B2.trans(), B3.trans(), B4.trans()));
+    //print(cbind(A, B2.trans(), B3.trans(), B4.trans()));
+    //cout << "-------------------------------------------------" << endl;
+    ////print(A.rbind(B2, B3, B4));
+    //print(rbind(A, B2, B3, B4));
+
+    // 生成对角阵
+    print(diag(B2));
 
     system("pause");
     return 0;

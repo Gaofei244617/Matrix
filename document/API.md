@@ -55,6 +55,15 @@ E = \left(
 \right)
 $$
 
+### 常用构造
+
+* `Matrix eye(const usize& m, const usize& n)`
+* `Matrix ones(const usize& m, const usize& n)`
+* `Matrix zeros(const usize& m, const usize& n)`
+* `Matrix rand(const usize& m, const usize& n)`
+* `Matrix diag(const Matrix& vec)`
+* `Matrix subMat()`
+
 ### 元素索引
 
 ```cpp
@@ -96,7 +105,7 @@ $
 * `Matrix cbind(Matrix& M1, [M2, M3,...])`
 * `Matrix subMat(usize r1, usize c1, usize r2, usize c2)`
 * `Matrix trans()`
-* `Matrix rank()`
+* `size_t rank()`
 * `double trace()`
 * `Matrix inv()`
 * `double det()`

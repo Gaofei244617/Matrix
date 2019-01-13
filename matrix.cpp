@@ -132,15 +132,36 @@ namespace mat
     }
 
     // 以向量为对角元素生成方阵
-    Matrix diag(const std::initializer_list<double>& nums)
+    Matrix diag(const Matrix& vec)
     {
-        usize size = nums.size();
-        Matrix matrix(size, size);
-        for (usize i = 0; i < size; i++)
+        usize row = 0;
+        usize column = 0;
+        std::tie(row, column) = vec.size();
+        if (row == 1 || column == 1)
         {
-            matrix[i][i] = *(nums.begin() + i);
+            const usize N = row > column ? row : column;
+            Matrix MAT(N, N);
+            if (row == 1)
+            {
+                for (usize i = 0; i < N; i++)
+                {
+                    MAT[i][i] = vec[0][i];
+                }
+            }
+            else
+            {
+                for (usize i = 0; i < N; i++)
+                {
+                    MAT[i][i] = vec[i][0];
+                }
+            }
+            return MAT;
         }
-        return matrix;
+        else
+        {
+            throw std::length_error("argument must be a vector.");
+        }
+        return Matrix();
     }
 
     // 求解线性方程组: Ax = b
