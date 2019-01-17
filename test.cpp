@@ -89,8 +89,21 @@ int main()
 
     //// 特征值
     //cout << "矩阵A的特征值：" << endl;
-    //auto val = eig(A);
+    //auto val = eigVal(A);
     //for (auto& v : val) { cout << v << endl; }
+
+    // 特征值和特征向量
+    cout << "矩阵A的特征值：" << endl;
+    auto val = A.eig();
+    for (auto& v : val)
+    {
+        cout << "特征值：" << get<0>(v) << ",  特征向量：";
+        for (int i = 0; i < get<0>(get<1>(v).size()); i++)
+        {
+            cout << get<1>(v)[i][0] << "  ";
+        }
+        cout << endl;
+    }
 
     //// 矩阵拼接
     //print(A);

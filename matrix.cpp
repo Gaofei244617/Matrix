@@ -81,9 +81,9 @@ namespace mat
     }
 
     // 矩阵特征值
-    std::vector<std::complex<double>> eig(const Matrix& mat, double e)
+    std::vector<std::complex<double>> eigVal(const Matrix& mat, double e)
     {
-        return mat.eig(e);
+        return mat.eigVal(e);
     }
 
     // 子阵

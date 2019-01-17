@@ -84,7 +84,10 @@ namespace mat
         double normInf()const;                                                     // 无穷范数,行和范数(每一行元素绝对值之和的最大值)
         std::pair<Matrix, Matrix> QR()const;                                       // 矩阵QR分解
         std::tuple<Matrix, Matrix, Matrix> LU()const;                              // 矩阵LU分解
-        std::vector<std::complex<double>> eig(double e = 0)const;                  // 矩阵特征值
+        std::vector<std::complex<double>> eigVal(double e = 0)const;               // 矩阵特征值
+        std::vector<std::pair<std::complex<double>, Matrix>>
+            eig(double e = 0)const;                                                // 矩阵特征值和特征向量
+
         std::tuple<Matrix, Matrix, Matrix> SVD()const;                             // 奇异值分解，返回S、V、D三个矩阵
 
         Matrix filter(std::function<bool(double)> f)const;                         // 高阶函数-filter

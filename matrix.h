@@ -19,7 +19,7 @@ namespace mat
     double det(const Matrix& mat);                                                         // 矩阵行列式
     std::pair<Matrix, Matrix> QR(const Matrix& mat);                                       // 矩阵QR分解,返回值{Q,R}
     std::tuple<Matrix, Matrix, Matrix> LU(const Matrix& mat);                              // 矩阵LU分解,返回值{P,L,U}
-    std::vector<std::complex<double>> eig(const Matrix& mat, double e = 0);                // 矩阵特征值
+    std::vector<std::complex<double>> eigVal(const Matrix& mat, double e = 0);                // 矩阵特征值
     std::tuple<Matrix, Matrix, Matrix> SVD(const Matrix& mat);                             // 奇异值分解，返回S、V、D三个矩阵
 
     Matrix eye(const usize& m, const usize& n);                                            // 单位矩阵

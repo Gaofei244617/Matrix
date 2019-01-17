@@ -7,7 +7,6 @@
 ```cpp
 Matrix();                                                                // 空矩阵
 Matrix(const size_t& m, const size_t& n);                                // 常规构造: m行数，n列数
-Matrix(const std::initializer_list<double>& m);                          // 列表构造
 Matrix(const std::initializer_list<std::initializer_list<double>>& m);   // 列表构造
 Matrix(const Matrix& other);                                             // 拷贝构造
 Matrix(Matrix&& other);                                                  // 移动构造
@@ -75,6 +74,10 @@ $$
 
 ### 元素索引
 
+支持`[]`操作符和`at()`函数进行矩阵元素索引。
+
+**Example:**
+
 ```cpp
 Matrix M({1,2,3},{4,5,6});
 M[1][1] = 0;                // []操作符
@@ -95,6 +98,7 @@ $
 ### 四则运算
 
 * **赋值运算**
+  =, +=, -=, *=, /=
 
 * **加法**
 
@@ -110,17 +114,22 @@ $
 **功能：** 获取矩阵行数和列数
 **函数原型：** `const std::pair<usize, usize> size(const Matrix& mat)`
 **输入：** 矩阵行数
-**返回：** 行向量
+**返回：** 矩阵行数和列数
 **示例：** `auto a = MAT.size();` or `auto a = size(MAT);`
 
 * `getRow`
-**功能：** 获取矩阵行向量
+**功能：** 获取矩阵**行**向量
 **函数原型：** `Matrix getRow(usize n)`
-**输入：** 矩阵行数
+**输入：** 矩阵行数(≥0)
 **返回：** 行向量
 **示例：** `Matrix vec = MAT.getRow(0);` or `Matrix vec = getRow(MAT, 0);`
 
-* `Matrix getColumn`
+* `getColumn`
+**功能：** 获取矩阵**列**向量
+**函数原型：** `Matrix getRow(usize n)`
+**输入：** 矩阵列数(≥0)
+**返回：** 列向量
+**示例：** `Matrix vec = MAT.getColumn(0);` or `Matrix vec = getColumn(MAT, 0);`
 * `getDiag`
 * `rbind`
 * `cbind`

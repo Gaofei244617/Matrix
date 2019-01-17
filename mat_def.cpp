@@ -539,7 +539,7 @@ namespace mat
     // 2范数,谱范数(AA'的最大特征值的平方根)
     double Matrix::normTwo()const
     {
-        auto vec = ((*this)*(this->trans())).eig();
+        auto vec = ((*this)*(this->trans())).eigVal();
         if (vec.size() > 0)
         {
             return std::abs(vec[0]);
@@ -888,7 +888,7 @@ namespace mat
     }
 
     // 求矩阵全部特征值(带双步位移的QR方法), e为精度水平
-    std::vector<std::complex<double>> Matrix::eig(double e)const
+    std::vector<std::complex<double>> Matrix::eigVal(double e)const
     {
         /* QR方法适用于计算一般实矩阵的全部特征值,尤其适用于中小型实矩阵 */
         /* 双步位移可以加速收敛 */
@@ -950,6 +950,50 @@ namespace mat
         std::sort(vec.begin(), vec.end(), f);
         return vec;
     }
+
+    //// 求矩阵全部特征值和特征向量, e为精度水平
+    //std::vector<std::pair<std::complex<double>, Matrix>> Matrix::eig(double e)const
+    //{
+    //    auto eig_val = this->eigVal(e);
+    //    const usize N = eig_val.size();
+    //    std::vector<std::pair<std::complex<double>, Matrix>> res(N);
+    //    if (N > 0)
+    //    {
+    //        // 确定精度水平,默认为矩阵1范数的 1/(1e10)
+    //        e == 0 ? e = this->normOne() / 1.0e10 : e = abs(e);
+
+    //        for (usize i = 0; i < N; i++)
+    //        {
+    //            double x = eig_val[i].real();
+    //            double y = eig_val[i].imag();
+    //            if (x != 0 && abs(y / x) < e)
+    //            {
+    //                auto result = gaussElimination(*this - x * eye(N, N));
+    //                Matrix M = std::get<0>(result);                                      // 高斯消元后的矩阵
+    //                std::unique_ptr<usize[]> R = std::move(std::get<1>(result));         // 行交换记录
+    //                const usize k = std::get<3>(result);                                 // 矩阵M的秩
+    //                for (usize j = k; j < N; j++)
+    //                {
+    //                    Matrix A(N, 1);
+    //                    Matrix B(N, 1);
+    //                    A[j][0] = 1.0;
+    //                    for (usize t = 0; t < N; t++)
+    //                    {
+    //                        B[R[t]][0] = A[t][0];
+    //                    }
+    //                    res[i + j - k] = std::make_pair(eig_val[i + j - k], std::move(B));
+    //                }
+    //                i = i + (N - k);
+    //            }
+    //            else
+    //            {
+    //                res[i] = std::make_pair(eig_val[i], Matrix());
+    //            }
+    //        }
+    //        return res;
+    //    }
+    //    return std::vector<std::pair<std::complex<double>, Matrix>>{};
+    //}
 
     // 矩阵求逆
     Matrix Matrix::inv()const
