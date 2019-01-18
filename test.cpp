@@ -83,27 +83,27 @@ int main()
     //cout << "-------------------------------------------------" << endl;
     //print(get<0>(QRVec) * get<1>(QRVec) * get<2>(QRVec));
 
-    //// 解线性方程组
-    //cout << "方程组的解：" << endl;
-    //print(std::get<0>(solve(A, b)));
+    // 解线性方程组
+    cout << "方程组的解：" << endl;
+    print(std::get<0>(solve(A, b)));
 
     //// 特征值
     //cout << "矩阵A的特征值：" << endl;
     //auto val = eigVal(A);
     //for (auto& v : val) { cout << v << endl; }
 
-    // 特征值和特征向量
-    cout << "矩阵A的特征值：" << endl;
-    auto val = A.eig();
-    for (auto& v : val)
-    {
-        cout << "特征值：" << get<0>(v) << ",  特征向量：";
-        for (int i = 0; i < get<0>(get<1>(v).size()); i++)
-        {
-            cout << get<1>(v)[i][0] << "  ";
-        }
-        cout << endl;
-    }
+    //// 特征值和特征向量
+    //cout << "矩阵A的特征值：" << endl;
+    //auto val = A.eig();
+    //for (auto& v : val)
+    //{
+    //    cout << "特征值：" << get<0>(v) << ",  特征向量：";
+    //    for (int i = 0; i < get<0>(get<1>(v).size()); i++)
+    //    {
+    //        cout << get<1>(v)[i][0] << "  ";
+    //    }
+    //    cout << endl;
+    //}
 
     //// 矩阵拼接
     //print(A);

@@ -188,20 +188,24 @@ namespace mat
         Matrix& matrix = std::get<0>(temp);                        // 全选主元高斯消元后的矩阵
         std::unique_ptr<usize[]>& R = std::get<1>(temp);           // 行交换信息
         std::unique_ptr<usize[]>& C = std::get<2>(temp);           // 列交换信息
-        usize rankA = std::get<3>(temp);                           // 系数矩阵的秩rank(A)
-        usize rankAb = A.cbind(b).rank();                          // rank(A,b)
+        const usize rankA = std::get<3>(temp);                     // 系数矩阵的秩rank(A)
+        const usize rankAb = A.cbind(b).rank();                    // rank(A,b)
 
-        usize n = A.column;                                        // 未知数个数
-        Matrix& vec = std::get<4>(temp);                           // 高斯消元后方程组的目标向量
+        const usize N = A.column;                                  // 未知数个数
+        Matrix vec = std::get<4>(temp);                            // 高斯消元后方程组的目标向量
 
-        /* rank(A) == rank(A,b) && rank(A) == n: 方程有唯一解 */
-        /* rank(A) == rank(A,b) && rank(A) < n:  方程有无穷多解 */
-        /* others: 方程无解( rank(A)不可能大于n ) */
+        /* rank(A) == rank(A,b) && rank(A) == N: 方程有唯一解 */
+        /* rank(A) == rank(A,b) && rank(A) < N:  方程有无穷多解 */
+        /* others: 方程无解( rank(A)不可能大于N ) */
 
         // (1) 方程有解
         if (rankA == rankAb)
         {
-            Matrix x(n, 1);   // 方程的解
+            // 方程的解向量
+            // (1.1) rankA == N : 方程有唯一解
+            // (1.2) rankA < N : 方程有无穷多解
+            const usize M = N - rankA + 1;  // 解向量的个数
+            Matrix x(N, M);
 
             // 求解高斯消元后的上三角方程组
             for (int i = rankA - 1; i >= 0; i--)
@@ -211,20 +215,11 @@ namespace mat
                     vec[i][0] -= matrix[i][rankA - 1 - j] * x[rankA - 1 - j][0];
                 }
 
-                x[i][0] = 1.0 * vec[i][0] / matrix[i][i];
-            }
-
-            // 方程有无穷多个解时，另解向量x部分元素为0，得到一个特解
-            if (rankA < n)
-            {
-                for (usize i = rankA; i < n; i++)
-                {
-                    x[i][0] = 0;
-                }
+                x[i][0] = vec[i][0] / matrix[i][i];
             }
 
             // 依据列交换信息,恢复向量x中元素的顺序
-            auto temp = x[rankA - 1][0];
+            double temp = 0;
             for (int i = rankA - 1; i >= 0; i--)
             {
                 if (C[i] != i)
@@ -235,17 +230,7 @@ namespace mat
                 }
             }
 
-            // (1.1) 方程有唯一解
-            if (rankA == n)
-            {
-                return std::make_pair(x, 0);
-            }
-
-            // (1.2) 方程有无穷多个解
-            if (rankA < n)
-            {
-                return std::make_pair(x, 1);
-            }
+            return std::make_pair(x, 0);
         }
 
         // (2)方程无解
