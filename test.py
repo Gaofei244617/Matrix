@@ -20,7 +20,17 @@ B = np.array([[1.0, 10, 3, 6, 7],
               [1.0, 10, 3, 6, 7], 
               [2.0, 0, 3, 1, 1]])
 
+C = np.array([[-1.0, 1, 0],
+              [-4, 3, 0], 
+              [1, 0, 2]])
 
+D = np.array([[2,3.0],[0,3]])
+
+E = np.array([[1.0,3,4,6,7],
+              [1.0,3,4,6,7],
+              [1.0,3,4,6,7],
+              [1.0,3,4,6,7],
+              [1.0,3,4,6,7]])
 
 b = np.array([[1.0], [2.0], [3.0], [4.0], [5.0]])
 #####################################################################
@@ -33,7 +43,7 @@ b = np.array([[1.0], [2.0], [3.0], [4.0], [5.0]])
 
 # print(np.linalg.inv(A))                # 逆矩阵
 
-# print(np.linalg.solve(A, b))           # 线性方程组
+print(np.linalg.solve(A, b))           # 线性方程组
 
 # val, vec = np.linalg.eig(A)            # 特征值和特征向量
 # print(val)
@@ -43,8 +53,8 @@ b = np.array([[1.0], [2.0], [3.0], [4.0], [5.0]])
 # print(Q)
 # print(R)
 
-P, L, U = linalg.lu(B)               # LU分解
-print(P)
-print(L)
-print(U)
-print(np.matmul(L, U))
+# P, L, U = linalg.lu(B)               # LU分解
+# print(P)
+# print(L)
+# print(U)
+# print(np.matmul(L, U))

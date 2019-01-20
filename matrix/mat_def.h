@@ -67,9 +67,9 @@ namespace mat
         Matrix getColumn(usize n)const;                                            // 获取列向量
         std::vector<double> getDiag()const;                                        // 获取对角元素
         Matrix rbind(const Matrix& M)const;                                        // [M1; M2; ...], 需要列数相等
+        Matrix cbind(const Matrix& M)const;                                        // [M1, M2, ...], 需要行数相等
         template<class T, class ...Args>
         Matrix rbind(const T& M, const Args&... args)const;                        // [M1, M2, ...], 需要行数相等
-        Matrix cbind(const Matrix& M)const;                                        // [M1, M2, ...], 需要行数相等
         template<class T, class ...Args>
         Matrix cbind(const T& M, const Args&... args)const;                        // [M1, M2, ...], 需要行数相等
         Matrix subMat(usize r1, usize c1, usize r2, usize c2)const;                // 子阵
@@ -78,17 +78,17 @@ namespace mat
         usize rank()const;                                                         // 矩阵的秩
         double trace()const;                                                       // 矩阵的迹
         Matrix inv()const;                                                         // 逆矩阵
+        Matrix kernel()const;                                                      // 矩阵的核(零空间)
         double det()const;                                                         // 矩阵行列式
         double normOne()const;                                                     // 1范数,列和范数(每一列元素绝对值之和的最大值)
         double normTwo()const;                                                     // 2范数,谱范数(AA'的最大特征值的平方根)
         double normInf()const;                                                     // 无穷范数,行和范数(每一行元素绝对值之和的最大值)
+        double cond(const std::string str = std::string("two"))const;              // 矩阵条件数(矩阵范数与逆矩阵范数的乘积,默认二范数)
         std::pair<Matrix, Matrix> QR()const;                                       // 矩阵QR分解
         std::tuple<Matrix, Matrix, Matrix> LU()const;                              // 矩阵LU分解
-        std::vector<std::complex<double>> eigVal(double e = 0)const;               // 矩阵特征值
-        std::vector<std::pair<std::complex<double>, Matrix>>
-            eig(double e = 0)const;                                                // 矩阵特征值和特征向量
-
         std::tuple<Matrix, Matrix, Matrix> SVD()const;                             // 奇异值分解，返回S、V、D三个矩阵
+        std::vector<std::complex<double>> eigVal(double e = 0)const;               // 矩阵特征值
+        std::vector<std::pair<std::complex<double>, Matrix>> eig(double e = 0)const; // 矩阵特征值和特征向量
 
         Matrix filter(std::function<bool(double)> f)const;                         // 高阶函数-filter
         Matrix map(std::function<double(double)> f)const;                          // 高阶函数-map

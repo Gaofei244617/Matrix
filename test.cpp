@@ -5,7 +5,7 @@
 #include <cmath>
 #include <complex>
 #include <vector>
-#include "matrix.h"
+#include "matrix\matrix.h"
 
 using namespace std;
 using namespace mat;

@@ -92,6 +92,18 @@ namespace mat
         return mat.subMat(r1, c1, r2, c2);
     }
 
+    // 高阶函数-filter
+    Matrix filter(const Matrix& mat, std::function<bool(double)> f)
+    {
+        return mat.filter(std::move(f));
+    }
+
+    // 高阶函数-map
+    Matrix map(const Matrix& mat, std::function<double(double)> f)
+    {
+        return mat.map(std::move(f));
+    }
+
     // 单位矩阵
     Matrix eye(const usize& m, const usize& n)
     {

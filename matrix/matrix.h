@@ -12,15 +12,18 @@ namespace mat
     double normOne(const Matrix& mat);                                                     // 1范数,列和范数(每一列元素绝对值之和的最大值)
     double normOne(const Matrix& mat);                                                     // 2范数,列和范数(AA'的最大特征值的平方根)
     double normInf(const Matrix& mat);                                                     // 无穷范数,行和范数(每一行元素绝对值之和的最大值)
+    double cond(const Matrix& mat, const std::string str = std::string("two"));            // 矩阵条件数(矩阵范数与逆矩阵范数的乘积,默认二范数)
     Matrix trans(const Matrix& mat);                                                       // 矩阵转置
     usize rank(const Matrix& mat);                                                         // 矩阵的秩
     double trace(const Matrix& mat);                                                       // 矩阵的迹
     Matrix inv(const Matrix& mat);                                                         // 逆矩阵
+    Matrix kernel(const Matrix& mat);
     double det(const Matrix& mat);                                                         // 矩阵行列式
     std::pair<Matrix, Matrix> QR(const Matrix& mat);                                       // 矩阵QR分解,返回值{Q,R}
     std::tuple<Matrix, Matrix, Matrix> LU(const Matrix& mat);                              // 矩阵LU分解,返回值{P,L,U}
-    std::vector<std::complex<double>> eigVal(const Matrix& mat, double e = 0);                // 矩阵特征值
     std::tuple<Matrix, Matrix, Matrix> SVD(const Matrix& mat);                             // 奇异值分解，返回S、V、D三个矩阵
+    std::vector<std::complex<double>> eigVal(const Matrix& mat, double e = 0);             // 矩阵特征值
+    std::vector<std::pair<std::complex<double>, Matrix>> eig(const Matrix& mat, double e = 0);   // 矩阵特征值
 
     Matrix eye(const usize& m, const usize& n);                                            // 单位矩阵
     Matrix ones(const usize& m, const usize& n);                                           // 元素全为1的矩阵
@@ -30,6 +33,9 @@ namespace mat
     template<class T, class... Args> Matrix rbind(const T& M, const Args&... args);        // [M1; M2; ...], 需要列数相等
     template<class T, class... Args> Matrix cbind(const T& M, const Args&... args);        // [M1, M2, ...], 需要行数相等
     Matrix subMat(const Matrix& mat, usize r1, usize c1, usize r2, usize c2);              // 子阵
+
+    Matrix filter(const Matrix& mat, std::function<bool(double)> f);                       // 高阶函数-filter
+    Matrix map(const Matrix& mat, std::function<double(double)> f);                        // 高阶函数-map
 
     std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b);                        // 求解线性方程组 Ax = b
 
