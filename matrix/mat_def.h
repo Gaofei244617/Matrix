@@ -90,6 +90,8 @@ namespace mat
         std::vector<std::complex<double>> eigVal(double e = 0)const;               // 矩阵特征值
         std::vector<std::pair<std::complex<double>, Matrix>> eig(double e = 0)const; // 矩阵特征值和特征向量
 
+        bool isZero(const double e = 0)const;                                      // 矩阵元素是否全部为零
+
         Matrix filter(std::function<bool(double)> f)const;                         // 高阶函数-filter
         Matrix map(std::function<double(double)> f)const;                          // 高阶函数-map
 

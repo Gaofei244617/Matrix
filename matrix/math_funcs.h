@@ -8,6 +8,9 @@ namespace mat
 
     // 符号函数
     double sgn(const double& num);
+
+    // 正态分布函数(均值为u,方差为t)
+    double random_norm(const double& u, const double& t);
 }
 
 #endif

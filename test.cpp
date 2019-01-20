@@ -83,9 +83,9 @@ int main()
     //cout << "-------------------------------------------------" << endl;
     //print(get<0>(QRVec) * get<1>(QRVec) * get<2>(QRVec));
 
-    // 解线性方程组
-    cout << "方程组的解：" << endl;
-    print(std::get<0>(solve(A, b)));
+    //// 解线性方程组
+    //cout << "方程组的解：" << endl;
+    //print(std::get<0>(solve(A, b)));
 
     //// 特征值
     //cout << "矩阵A的特征值：" << endl;

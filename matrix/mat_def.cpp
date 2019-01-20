@@ -1112,6 +1112,21 @@ namespace mat
         return M;
     }
 
+    // 矩阵元素是否全部为零
+    bool Matrix::isZero(const double e)const
+    {
+        const usize Length = this->row * this->column;
+        for (usize i = 0; i < Length; i++)
+        {
+            if (std::abs(mat_data[i]) > std::abs(e))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /*********************************************** Private *****************************************************************/
     // 行交换(m行,n行)
     void Matrix::swap_row(const usize& m, const usize& n)
     {

@@ -92,6 +92,12 @@ namespace mat
         return mat.subMat(r1, c1, r2, c2);
     }
 
+    // 矩阵元素是否全部为零
+    bool isZero(const Matrix& mat, const double e)
+    {
+        return mat.isZero(e);
+    }
+
     // 高阶函数-filter
     Matrix filter(const Matrix& mat, std::function<bool(double)> f)
     {
@@ -129,18 +135,46 @@ namespace mat
         return Matrix(m, n);
     }
 
-    // 随机矩阵, 元素取值[0, 1.0)
-    Matrix rand(const usize& m, const usize& n)
+    // Hilbert矩阵(高度病态)
+    Matrix hilb(const usize& m, const usize& n)
     {
-        Matrix M(m, n);
+        Matrix mat(m, n);
         for (usize i = 0; i < m; i++)
         {
             for (usize j = 0; j < n; j++)
             {
-                M[i][j] = random_real();
+                mat[i][j] = 1.0 / (i + j + 1);
             }
         }
-        return M;
+        return mat;
+    }
+
+    // 随机矩阵, 元素取值[0, 1.0)
+    Matrix rand(const usize& m, const usize& n)
+    {
+        Matrix mat(m, n);
+        for (usize i = 0; i < m; i++)
+        {
+            for (usize j = 0; j < n; j++)
+            {
+                mat[i][j] = random_real();
+            }
+        }
+        return mat;
+    }
+
+    // 随机矩阵, 元素服从正态分布(均值u,方差t)
+    Matrix randn(const usize& m, const usize& n, const double u, const double t)
+    {
+        Matrix mat(m, n);
+        for (usize i = 0; i < m; i++)
+        {
+            for (usize j = 0; j < n; j++)
+            {
+                mat[i][j] = random_norm(u, t);
+            }
+        }
+        return mat;
     }
 
     // 以向量为对角元素生成方阵
@@ -203,7 +237,7 @@ namespace mat
         const usize rankA = std::get<3>(temp);                     // 系数矩阵的秩rank(A)
         const usize rankAb = A.cbind(b).rank();                    // rank(A,b)
 
-        const usize N = A.column;                                  // 未知数个数
+        const usize N = A.column;                                  // 变量数个数
         Matrix vec = std::get<4>(temp);                            // 高斯消元后方程组的目标向量
 
         /* rank(A) == rank(A,b) && rank(A) == N: 方程有唯一解 */

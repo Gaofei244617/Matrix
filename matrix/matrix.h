@@ -28,11 +28,15 @@ namespace mat
     Matrix eye(const usize& m, const usize& n);                                            // 单位矩阵
     Matrix ones(const usize& m, const usize& n);                                           // 元素全为1的矩阵
     Matrix zeros(const usize& m, const usize& n);                                          // 元素全为0的矩阵
+    Matrix hilb(const usize& m, const usize& n);                                           // Hilbert矩阵(高度病态)
     Matrix rand(const usize& m, const usize& n);                                           // 随机矩阵, 元素取值[0, 1.0)
+    Matrix randn(const usize& m, const usize& n, const double u = 0, const double t = 1);  // 随机矩阵, 元素服从正态分布(均值u,方差t)
     Matrix diag(const Matrix& vec);                                                        // 以向量为对角元素生成方阵
     template<class T, class... Args> Matrix rbind(const T& M, const Args&... args);        // [M1; M2; ...], 需要列数相等
     template<class T, class... Args> Matrix cbind(const T& M, const Args&... args);        // [M1, M2, ...], 需要行数相等
     Matrix subMat(const Matrix& mat, usize r1, usize c1, usize r2, usize c2);              // 子阵
+
+    bool isZero(const Matrix& mat, const double e = 0);                                    // 矩阵元素是否全部为零
 
     Matrix filter(const Matrix& mat, std::function<bool(double)> f);                       // 高阶函数-filter
     Matrix map(const Matrix& mat, std::function<double(double)> f);                        // 高阶函数-map
