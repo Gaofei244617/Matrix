@@ -2,6 +2,8 @@
 \usepackage{amsmath}
 \usepackage{listings}
 \usepackage{geometry}
+%\usepackage{fontspec}
+
 \geometry{a4paper,left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
 \CTEXsetup[format={\large\bfseries}]{section}
 
@@ -9,8 +11,9 @@
 \author{高飞}
 \date{\today}
 
-\begin{document}\large
+\begin{document}
 \maketitle
+\newpage
 \tableofcontents
 \newpage
 
@@ -22,6 +25,18 @@
 \end{itemize}
 
 \section{矩阵构造}
+
+构造函数：
+{
+    \setmainfont{Consolas}
+    \begin{lstlisting}[language=C++]
+    Matrix();
+    Matrix(const usize& m, const usize& n);
+    Matrix(const std::initializer_list<std::initializer_list<double>>& m);
+    Matrix(const Matrix& other);
+    Matrix(Matrix&& other);
+    \end{lstlisting}
+}
 
 \section{常用构造}
 
