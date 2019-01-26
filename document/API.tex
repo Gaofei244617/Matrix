@@ -94,19 +94,6 @@ $$
 }
 }
 
-\section{常用矩阵}
-
-\begin{itemize}
-    \item \textbf{eye}
-    \item \textbf{ones}
-    \item \textbf{zeros}
-    \item \textbf{hilb}
-    \item \textbf{rand}
-    \item \textbf{randn}
-    \item \textbf{diag}
-    \item \textbf{subMat}
-\end{itemize}
-
 \section{元素索引}
 支持[]操作符和at()函数进行矩阵元素索引。
 
@@ -124,25 +111,75 @@ $$
 
 \textbf{[]操作符与at()函数的区别：}[]操作符不进行下标越界检查，at()函数会进行下标检查，若下标越界则抛出\textbf{std::out\_of\_range}异常。
 
+\section{矩阵生成}
+\subsection{eye}
+\subsection{ones}
+\subsection{zeros}
+\subsection{hilb}
+\subsection{rand}
+\subsection{randn}
+\subsection{diag}
+\subsection{subMat}
+
 \section{四则运算}
+\subsection{赋值运算}
+\subsection{矩阵加法}
+\subsection{矩阵减法}
+\subsection{矩阵乘法}
+\subsection{矩阵除法}
 
-\begin{itemize}
-    \item \textbf{赋值运算}
-    \item \textbf{加法}
-    \item \textbf{减法}
-    \item \textbf{乘法}
-    \item \textbf{除法}
-\end{itemize}
+\section{矩阵属性}
+\subsection{size}
+\textbf{功能：}
 
-\section{矩阵基本操作}
+获取矩阵行数和列数
+
+\textbf{函数原型：}
+{
+    \setmainfont{Consolas}
+    \begin{lstlisting}[language=C++]
+    const std::pair<usize, usize> size(const Matrix& mat)
+    \end{lstlisting}
+}
+
+\textbf{输入：}
+
+矩阵行数
+
+\textbf{返回值：}
+
+矩阵行数和列数
+
+\textbf{示例：}
+{
+    \setmainfont{Consolas}
+    \begin{lstlisting}[language=C++]
+    auto a = MAT.size();  //or 
+    auto a = size(MAT);
+    \end{lstlisting}
+}
+
+\subsection{trans}
+\subsection{rank}
+\subsection{trace}
+\subsection{inv}
+\subsection{kernel}
+\subsection{det}
+\subsection{normOne, normTwo, normInf}
 
 \section{矩阵分解}
+\subsection{QR分解}
+\subsection{LU分解(Doolittle分解)}
+\subsection{特征值分解}
+\subsection{SVD分解}
 
-\begin{itemize}
-    \item \textbf{QR分解}
-    \item \textbf{LU分解(Doolittle分解)}
-    \item \textbf{SVD分解}
-\end{itemize}
-
+\section{其它函数}
+\subsection{getRow,getColumn,getDiag}
+\subsection{rbind,cbind}
+\subsection{isZero}
+\subsection{filter}
+\subsection{map}
+\subsection{rref}
+\subsection{solve}
 
 \end{document}
