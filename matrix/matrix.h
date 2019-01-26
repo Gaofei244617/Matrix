@@ -16,8 +16,9 @@ namespace mat
     Matrix trans(const Matrix& mat);                                                       // 矩阵转置
     usize rank(const Matrix& mat);                                                         // 矩阵的秩
     double trace(const Matrix& mat);                                                       // 矩阵的迹
+    Matrix rref(const Matrix& mat);                                                        // 简化的行阶梯形矩阵（Gauss-Jordan 消元法）
     Matrix inv(const Matrix& mat);                                                         // 逆矩阵
-    Matrix kernel(const Matrix& mat);
+    Matrix kernel(const Matrix& mat);                                                      // 矩阵的核(零空间)
     double det(const Matrix& mat);                                                         // 矩阵行列式
     std::pair<Matrix, Matrix> QR(const Matrix& mat);                                       // 矩阵QR分解,返回值{Q,R}
     std::tuple<Matrix, Matrix, Matrix> LU(const Matrix& mat);                              // 矩阵LU分解,返回值{P,L,U}
@@ -32,8 +33,8 @@ namespace mat
     Matrix rand(const usize& m, const usize& n);                                           // 随机矩阵, 元素取值[0, 1.0)
     Matrix randn(const usize& m, const usize& n, const double u = 0, const double t = 1);  // 随机矩阵, 元素服从正态分布(均值u,方差t)
     Matrix diag(const Matrix& vec);                                                        // 以向量为对角元素生成方阵
-    template<class T, class... Args> Matrix rbind(const T& M, const Args&... args);        // [M1; M2; ...], 需要列数相等
-    template<class T, class... Args> Matrix cbind(const T& M, const Args&... args);        // [M1, M2, ...], 需要行数相等
+    template<class T, class... Args> Matrix rbind(const T& M, const Args& ... args);        // [M1; M2; ...], 需要列数相等
+    template<class T, class... Args> Matrix cbind(const T& M, const Args& ... args);        // [M1, M2, ...], 需要行数相等
     Matrix subMat(const Matrix& mat, usize r1, usize c1, usize r2, usize c2);              // 子阵
 
     bool isZero(const Matrix& mat, const double e = 0);                                    // 矩阵元素是否全部为零
@@ -46,14 +47,14 @@ namespace mat
     /******************************************** 函数模板 ****************************************************************/
     // [M1; M2; ...], 需要列数相等
     template<class T, class... Args>
-    Matrix rbind(const T& M, const Args&... args)
+    Matrix rbind(const T& M, const Args& ... args)
     {
         return M.rbind(args...);
     }
 
     // [M1, M2, ...], 需要行数相等
     template<class T, class... Args>
-    Matrix cbind(const T& M, const Args&... args)
+    Matrix cbind(const T& M, const Args& ... args)
     {
         return M.cbind(args...);
     }

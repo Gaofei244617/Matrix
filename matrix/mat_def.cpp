@@ -5,6 +5,8 @@
 #include <iostream>
 #include <algorithm>
 
+#include <iostream>
+
 namespace mat
 {
     // 常规构造: m行数，n列数
@@ -13,7 +15,7 @@ namespace mat
     {
         if (m > 0 && n > 0)
         {
-            mat_data = new double[m*n]();
+            mat_data = new double[m * n]();
             row = m;
             column = n;
         }
@@ -44,7 +46,7 @@ namespace mat
                 {
                     for (usize j = 0; j < column; j++)
                     {
-                        mat_data[i*column + j] = *((*(m.begin() + i)).begin() + j);
+                        mat_data[i * column + j] = *((*(m.begin() + i)).begin() + j);
                     }
                 }
             }
@@ -56,7 +58,7 @@ namespace mat
     }
 
     // 复制构造
-    Matrix::Matrix(const Matrix& other) : row(0), column(0), mat_data(nullptr)
+    Matrix::Matrix(const Matrix & other) : row(0), column(0), mat_data(nullptr)
     {
         mat_data = new double[other.row * other.column];
         row = other.row;
@@ -70,7 +72,7 @@ namespace mat
     }
 
     // 移动构造
-    Matrix::Matrix(Matrix&& other) : row(0), column(0), mat_data(nullptr)
+    Matrix::Matrix(Matrix && other) : row(0), column(0), mat_data(nullptr)
     {
         //*this = std::move(other);
         mat_data = other.mat_data;
@@ -90,7 +92,7 @@ namespace mat
     {
         if (m < row && n < column)
         {
-            return mat_data[column*m + n];
+            return mat_data[column * m + n];
         }
         else
         {
@@ -101,7 +103,7 @@ namespace mat
     {
         if (m < row && n < column)
         {
-            return mat_data[column*m + n];
+            return mat_data[column * m + n];
         }
         else
         {
@@ -110,7 +112,7 @@ namespace mat
     }
 
     // 赋值运算
-    Matrix& Matrix::operator=(const Matrix& other)noexcept
+    Matrix& Matrix::operator=(const Matrix & other)noexcept
     {
         if (this != &other)
         {
@@ -127,7 +129,7 @@ namespace mat
         }
         return *this;
     }
-    Matrix& Matrix::operator=(Matrix&& other)noexcept
+    Matrix& Matrix::operator=(Matrix && other)noexcept
     {
         if (this != &other)
         {
@@ -139,7 +141,7 @@ namespace mat
         }
         return *this;
     }
-    Matrix& Matrix::operator+=(const Matrix& m)
+    Matrix& Matrix::operator+=(const Matrix & m)
     {
         if (row == m.row && column == m.column)
         {
@@ -187,7 +189,7 @@ namespace mat
         }
         return *this;
     }
-    Matrix& Matrix::operator-=(const Matrix& m)
+    Matrix& Matrix::operator-=(const Matrix & m)
     {
         if (row == m.row && column == m.column)
         {
@@ -219,7 +221,7 @@ namespace mat
         }
         return *this;
     }
-    Matrix& Matrix::operator*=(const Matrix& m)
+    Matrix& Matrix::operator*=(const Matrix & m)
     {
         if (std::get<1>(this->size()) == std::get<0>(m.size()))
         {
@@ -273,7 +275,7 @@ namespace mat
     }
 
     // 点乘(除)运算
-    Matrix Matrix::dotMult(const Matrix& m)const
+    Matrix Matrix::dotMult(const Matrix & m)const
     {
         if (this->row == m.row && this->column == m.column)
         {
@@ -291,7 +293,7 @@ namespace mat
         }
         return *this;
     }
-    Matrix& Matrix::dotMult(Matrix&& m)const
+    Matrix& Matrix::dotMult(Matrix && m)const
     {
         if (this->row == m.row && this->column == m.column)
         {
@@ -308,7 +310,7 @@ namespace mat
         }
         return m = *this;
     }
-    Matrix Matrix::dotDiv(const Matrix& m)const
+    Matrix Matrix::dotDiv(const Matrix & m)const
     {
         if (this->row == m.row && this->column == m.column)
         {
@@ -342,7 +344,7 @@ namespace mat
         }
         return *this;
     }
-    Matrix& Matrix::dotDiv(Matrix&& m)const
+    Matrix& Matrix::dotDiv(Matrix && m)const
     {
         if (this->row == m.row && this->column == m.column)
         {
@@ -390,7 +392,7 @@ namespace mat
             Matrix vec(1, this->column);
             for (usize i = 0; i < this->column; i++)
             {
-                vec[0][i] = mat_data[n*column + i];
+                vec[0][i] = mat_data[n * column + i];
             }
             return vec;
         }
@@ -405,7 +407,7 @@ namespace mat
             Matrix vec(this->row, 1);
             for (usize i = 0; i < this->row; i++)
             {
-                vec[1][0] = mat_data[i*column + n];
+                vec[1][0] = mat_data[i * column + n];
             }
             return vec;
         }
@@ -425,13 +427,13 @@ namespace mat
         std::vector<double> vec;
         for (usize i = 0; i < size; i++)
         {
-            vec.emplace_back(mat_data[i*column + i]);
+            vec.emplace_back(mat_data[i * column + i]);
         }
         return vec;
     }
 
     // [M1; M2; ...], 需要列数相等
-    Matrix Matrix::rbind(const Matrix& M)const
+    Matrix Matrix::rbind(const Matrix & M)const
     {
         if (this->column == M.column)
         {
@@ -462,7 +464,7 @@ namespace mat
     }
 
     // [M1, M2, ...], 需要行数相等
-    Matrix Matrix::cbind(const Matrix& M)const
+    Matrix Matrix::cbind(const Matrix & M)const
     {
         if (this->row == M.row)
         {
@@ -495,14 +497,14 @@ namespace mat
     // 子阵,形参为左上角元素位置和右下角元素位置
     Matrix Matrix::subMat(usize r1, usize c1, usize r2, usize c2)const
     {
-        if (r2 < this->row && c2 < this->column && r1 <= r2 && c1 <= c2)
+        if (r2 < this->row&& c2 < this->column&& r1 <= r2 && c1 <= c2)
         {
             Matrix matrix(r2 - r1 + 1, c2 - c1 + 1);
             for (usize i = r1; i <= r2; i++)
             {
                 for (usize j = c1; j <= c2; j++)
                 {
-                    matrix.mat_data[(i - r1)*matrix.column + j - c1] = this->mat_data[i*column + j];
+                    matrix.mat_data[(i - r1) * matrix.column + j - c1] = this->mat_data[i * column + j];
                 }
             }
             return matrix;
@@ -514,7 +516,7 @@ namespace mat
         return *this;
     }
 
-    // 1范数(列和范数)
+    // 1-范数(列和范数)
     double Matrix::normOne()const
     {
         double norm = 0;
@@ -525,7 +527,7 @@ namespace mat
                 double temp = 0;
                 for (usize j = 0; j < this->row; j++)
                 {
-                    temp += abs(this->mat_data[j*column + i]);
+                    temp += abs(this->mat_data[j * column + i]);
                 }
                 if (temp > norm)
                 {
@@ -536,10 +538,10 @@ namespace mat
         return norm;
     }
 
-    // 2范数,谱范数(AA'的最大特征值的平方根)
+    // 2-范数,谱范数(AA'的最大特征值的平方根)
     double Matrix::normTwo()const
     {
-        auto vec = ((*this)*(this->trans())).eigVal();
+        auto vec = ((*this) * (this->trans())).eigVal();
         if (vec.size() > 0)
         {
             return std::abs(vec[0]);
@@ -558,7 +560,7 @@ namespace mat
                 double temp = 0;
                 for (usize j = 0; j < this->column; j++)
                 {
-                    temp += abs(this->mat_data[i*column + j]);
+                    temp += abs(this->mat_data[i * column + j]);
                 }
                 if (temp > norm)
                 {
@@ -567,6 +569,32 @@ namespace mat
             }
         }
         return norm;
+    }
+
+    // 矩阵条件数(矩阵范数与逆矩阵范数的乘积,默认二范数)
+    double Matrix::cond(const std::string str)const
+    {
+        // 使用1-范数
+        if (str == std::string("one"))
+        {
+            return (*this).normOne()* (this->inv()).normOne();
+        }
+
+        // 使用2-范数
+        if (str == std::string("two"))
+        {
+            return (*this).normTwo()* (this->inv()).normTwo();
+        }
+
+        // 使用无穷范数
+        if (str == std::string("inf"))
+        {
+            return (*this).normInf()* (this->inv()).normInf();
+        }
+        else
+        {
+            throw std::invalid_argument("Invalid argument.");
+        }
     }
 
     // 矩阵转置
@@ -579,7 +607,7 @@ namespace mat
             {
                 for (usize j = 0; j < row; j++)
                 {
-                    matrix.mat_data[i*matrix.column + j] = this->mat_data[j*column + i];
+                    matrix.mat_data[i * matrix.column + j] = this->mat_data[j * column + i];
                 }
             }
             return matrix;
@@ -607,7 +635,7 @@ namespace mat
                 double sum = 0;
                 for (usize i = 0; i < this->row; i++)
                 {
-                    sum += this->mat_data[i*column + i];
+                    sum += this->mat_data[i * column + i];
                 }
                 return sum;
             }
@@ -638,13 +666,13 @@ namespace mat
             for (usize i = 0; i < matrix.row - 1; i++)
             {
                 // 选列主元
-                temp = abs(matrix.mat_data[i*column + i]);
+                temp = abs(matrix.mat_data[i * column + i]);
                 col = i;
                 for (usize j = i + 1; j < matrix.row; j++)
                 {
-                    if (abs(matrix.mat_data[j*column + i]) > temp)
+                    if (abs(matrix.mat_data[j * column + i]) > temp)
                     {
-                        temp = abs(matrix.mat_data[j*column + i]);
+                        temp = abs(matrix.mat_data[j * column + i]);
                         col = j; // 记录主元所在行
                     }
                 }
@@ -653,22 +681,22 @@ namespace mat
                 {
                     for (usize k = 0; k < matrix.column; k++)
                     {
-                        temp = matrix.mat_data[i*column + k];
-                        matrix.mat_data[i*column + k] = matrix.mat_data[col*column + k];
-                        matrix.mat_data[col*column + k] = temp;
+                        temp = matrix.mat_data[i * column + k];
+                        matrix.mat_data[i * column + k] = matrix.mat_data[col * column + k];
+                        matrix.mat_data[col * column + k] = temp;
                     }
                     flag *= -1;
                     // 主元为0，说明方阵不满秩，行列式为0
-                    if (matrix.mat_data[i*column + i] == 0)
+                    if (matrix.mat_data[i * column + i] == 0)
                         return 0;
                 }
                 // 高斯消元
                 for (usize j = i + 1; j < matrix.row; j++)
                 {
-                    temp = matrix.mat_data[j*column + i] / matrix.mat_data[i*column + i];
+                    temp = matrix.mat_data[j * column + i] / matrix.mat_data[i * column + i];
                     for (usize k = i; k < matrix.column; k++)
                     {
-                        matrix.mat_data[j*column + k] -= temp * matrix.mat_data[i*column + k];
+                        matrix.mat_data[j * column + k] -= temp * matrix.mat_data[i * column + k];
                     }
                 }
             }
@@ -676,7 +704,7 @@ namespace mat
             temp = 1;
             for (usize i = 0; i < matrix.row; i++)
             {
-                temp *= matrix.mat_data[i*column + i];
+                temp *= matrix.mat_data[i * column + i];
             }
             return temp * flag;
         }
@@ -893,6 +921,10 @@ namespace mat
         /* QR方法适用于计算一般实矩阵的全部特征值,尤其适用于中小型实矩阵 */
         /* 双步位移可以加速收敛 */
         /* 计算结果降序排序 */
+        // A_k = QR
+        // A_k+1 = RQ
+        // A_k+1相似于A_k,两者具有相同的特征值
+        // 反复迭代后A_k收敛于一个对角阵,由对角阵获得矩阵特征值
 
         // 只有非空方阵才能求特征值
         if (this->row != this->column || this->row == 0)
@@ -951,9 +983,16 @@ namespace mat
         return vec;
     }
 
+    // 简化的行阶梯形矩阵（Gauss-Jordan 消元法）
+    Matrix Matrix::rref()const
+    {
+        return std::move(std::get<0>(this->Gauss_Jordan_Elimination()));
+    }
+
     // 矩阵求逆
     Matrix Matrix::inv()const
     {
+        // 矩阵非空,且为方阵
         if (this->row > 0 && this->row == this->column)
         {
             Matrix matrix(*this);
@@ -1005,14 +1044,14 @@ namespace mat
                 }
 
                 // 主元为0, 矩阵不满秩, 没有逆矩阵
-                if (matrix.mat_data[k*column + k] == 0)
+                if (matrix.mat_data[k * column + k] == 0)
                 {
                     throw std::logic_error("No inverse matrix.");
                     return Matrix();
                 }
                 else
                 {
-                    matrix.mat_data[k*column + k] = 1 / matrix.mat_data[k*column + k];
+                    matrix.mat_data[k * column + k] = 1 / matrix.mat_data[k * column + k];
                 }
 
                 for (usize j = 0; j < n; j++)
@@ -1077,6 +1116,89 @@ namespace mat
         return *this;
     }
 
+    // 矩阵的核(零空间)
+    Matrix Matrix::kernel()const
+    {
+        // 简化的行阶梯形矩阵（Gauss-Jordan 消元法）
+        Matrix mat;
+        usize rank;
+        std::tie(mat, std::ignore, rank) = this->Gauss_Jordan_Elimination();
+
+        // 满秩矩阵零空间为空
+        if (rank == mat.column)
+        {
+            return Matrix();
+        }
+
+        // 列交换记录
+        std::unique_ptr<usize[]> rec(new usize[mat.column]);
+        for (usize i = 0; i < mat.column; i++)
+        {
+            rec[i] = i;
+        }
+
+        usize temp_col;   // 缓存
+        // 列交换,将主对角元素变为1
+        for (usize i = 0; i < rank; i++)
+        {
+            if (mat[i][i] == 0)
+            {
+                // 搜寻主元所在列
+                for (usize j = i + 1; j < mat.column; j++)
+                {
+                    // 列交换
+                    if (mat[i][j] != 0)
+                    {
+                        mat.swap_col(i, j);
+                        temp_col = rec[i];
+                        rec[i] = rec[j];
+                        rec[j] = temp_col;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // 矩阵零空间
+        // mat = [I,F;0,0], ker = [-F;I]
+        Matrix ker(mat.column, mat.column - rank);
+        for (usize i = 0; i < rank; i++)
+        {
+            // -F
+            for (usize j = 0; j < (mat.column - rank); j++)
+            {
+                ker[i][j] = -mat[i][j + rank];
+            }
+            // I
+            for (usize i = 0; i < mat.column - rank; i++)
+            {
+                ker[i + rank][i] = 1;
+            }
+        }
+
+        // 根据列交换记录还原零空间矩阵
+        for (usize i = 0; i < mat.column; i++)
+        {
+            ker.swap_row(i, rec[i]);
+        }
+
+        return ker;
+    }
+
+    // 矩阵元素是否全部为零
+    bool Matrix::isZero(const double e)const
+    {
+        const usize Length = this->row * this->column;
+        for (usize i = 0; i < Length; i++)
+        {
+            if (std::abs(mat_data[i]) > std::abs(e))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // 高阶函数-filter
     Matrix Matrix::filter(std::function<bool(double)> f)const
     {
@@ -1112,23 +1234,9 @@ namespace mat
         return M;
     }
 
-    // 矩阵元素是否全部为零
-    bool Matrix::isZero(const double e)const
-    {
-        const usize Length = this->row * this->column;
-        for (usize i = 0; i < Length; i++)
-        {
-            if (std::abs(mat_data[i]) > std::abs(e))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
     /*********************************************** Private *****************************************************************/
     // 行交换(m行,n行)
-    void Matrix::swap_row(const usize& m, const usize& n)
+    void Matrix::swap_row(const usize & m, const usize & n)
     {
         if (m != n)
         {
@@ -1137,15 +1245,15 @@ namespace mat
             double temp = 0;
             for (usize i = 0; i < column; i++)
             {
-                temp = mat_data[m*column + i];
-                mat_data[m*column + i] = mat_data[n*column + i];
-                mat_data[n*column + i] = temp;
+                temp = mat_data[m * column + i];
+                mat_data[m * column + i] = mat_data[n * column + i];
+                mat_data[n * column + i] = temp;
             }
         }
     }
 
     // 列交换(m列,n列)
-    void Matrix::swap_col(const usize& m, const usize& n)
+    void Matrix::swap_col(const usize & m, const usize & n)
     {
         if (m != n)
         {
@@ -1154,17 +1262,110 @@ namespace mat
             double temp = 0;
             for (usize i = 0; i < row; i++)
             {
-                temp = mat_data[i*column + m];
-                mat_data[i*column + m] = mat_data[i*column + n];
-                mat_data[i*column + n] = temp;
+                temp = mat_data[i * column + m];
+                mat_data[i * column + m] = mat_data[i * column + n];
+                mat_data[i * column + n] = temp;
             }
         }
+    }
+
+    //Gauss-Jordan消元法,返回{消元后的矩阵,行交换记录,秩}
+    std::tuple<Matrix, std::unique_ptr<usize[]>, usize> Matrix::Gauss_Jordan_Elimination()const
+    {
+        // Ax=b
+        // A的行交换对应于b的行交换
+        // A的列交换对应于x的行交换
+
+        const double e = this->normOne() / 1.0e16;  // 截断误差
+
+        const usize ROW = this->row;
+        const usize COL = this->column;
+
+        // 空矩阵
+        if (ROW == 0 || COL == 0)
+        {
+            return std::make_tuple(Matrix(), std::unique_ptr<usize[]>(), 0);
+        }
+
+        Matrix MAT(*this);
+        usize rank = 0;
+        std::unique_ptr<usize[]> rec(new usize[ROW]);
+        for (usize i = 0; i < ROW; i++)
+        {
+            rec[i] = i;
+        }
+
+        double temp;      // 主元
+        usize r;          // 主元位置(行数)
+        usize i = 0;
+        usize j = 0;
+        usize temp_u;    // 缓存
+
+        for (i = 0, j = 0; i < ROW && i < COL; i++, j++)
+        {
+            // 选主元(row)
+            while (j < COL)
+            {
+                temp = MAT[i][j];
+                r = i;
+
+                for (usize t = i; t < ROW; t++)
+                {
+                    if (abs(MAT[t][j]) > abs(temp))
+                    {
+                        temp = MAT[t][j];
+                        r = t;
+                    }
+                }
+                if (abs(temp) < e)
+                {
+                    temp = 0;
+                    j++;
+                }
+                else
+                {
+                    rank++;
+                    break;
+                }
+            }
+
+            // 行交换
+            MAT.swap_row(i, r);
+            temp_u = rec[i];
+            rec[i] = rec[r];
+            rec[r] = temp_u;
+
+            if (j < COL)
+            {
+                // 消元
+                for (usize t = 0; t < ROW; t++)
+                {
+                    double amp = MAT[t][j] / MAT[i][j];
+                    if (t != i)
+                    {
+                        MAT[t][j] = 0;
+                        for (usize k = j + 1; k < COL; k++)
+                        {
+                            MAT[t][k] = MAT[t][k] - MAT[i][k] * amp;
+                        }
+                    }
+                }
+
+                // 主元素归一化
+                for (usize t = j + 1; t < COL; t++)
+                {
+                    MAT[i][t] = MAT[i][t] / MAT[i][j];
+                }
+                MAT[i][j] = 1;
+            }
+        }
+        return std::make_tuple(std::move(MAT), std::move(rec), rank);
     }
 
     // 全选主元高斯消去
     // 返回值分别为：{消元后的矩阵，行交换记录，列交换记录，矩阵的秩，消元后的向量}
     std::tuple<Matrix, std::unique_ptr<usize[]>, std::unique_ptr<usize[]>, usize, Matrix>
-        Matrix::gaussElimination(const Matrix& A, const Matrix& b)
+        Matrix::gaussElimination(const Matrix & A, const Matrix & b)
     {
         /***************************************************************/
         // 形参b[可选]，默认为空向量
@@ -1178,7 +1379,7 @@ namespace mat
             return std::make_tuple(Matrix(), nullptr, nullptr, 0, Matrix());
         }
 
-        // b不采用默认值
+        // 向量b不采用默认值
         if (b.row != 0)
         {
             if (b.column != 1 || b.row != A.row)
@@ -1252,7 +1453,7 @@ namespace mat
             }
 
             // 主元为0则主元右下角元素均为0, 高斯消元完成
-            if (matrix.mat_data[k*column + k] == 0)
+            if (matrix.mat_data[k * column + k] == 0)
             {
                 break;
             }
@@ -1261,11 +1462,11 @@ namespace mat
             for (usize i = k + 1; i < matrix.row; i++)
             {
                 // 矩阵matrix消元
-                temp = matrix.mat_data[i*column + k] / matrix.mat_data[k*column + k];
-                matrix.mat_data[i*column + k] = 0;
+                temp = matrix.mat_data[i * column + k] / matrix.mat_data[k * column + k];
+                matrix.mat_data[i * column + k] = 0;
                 for (usize j = k + 1; j < matrix.column; j++)
                 {
-                    matrix.mat_data[i*column + j] -= temp * matrix.mat_data[k*column + j];
+                    matrix.mat_data[i * column + j] -= temp * matrix.mat_data[k * column + j];
                 }
 
                 // 向量vec消元
@@ -1280,7 +1481,7 @@ namespace mat
         usize count = 0;
         for (usize i = 0; i < size; i++)
         {
-            if (matrix.mat_data[i*column + i] != 0)
+            if (matrix.mat_data[i * column + i] != 0)
             {
                 count++;
             }
@@ -1289,7 +1490,7 @@ namespace mat
         return std::make_tuple(matrix, std::move(R), std::move(C), count, vec);
     }
 
-    // 矩阵拟上三角化
+    // 矩阵拟上三角化(采用Householder矩阵进行变换)
     Matrix Matrix::hess2()const
     {
         if (this->row > 0 && this->row == this->column)
@@ -1352,8 +1553,8 @@ namespace mat
                     //Q -= Q * U_R * U_R.trans() / h_r;
                     P_R = A.trans() * U_R / h_r;
                     Q_R = A * U_R / h_r;
-                    t_r = (P_R.trans()*U_R / h_r)[0][0];
-                    A -= (Q_R - t_r * U_R)*U_R.trans() + U_R * P_R.trans();
+                    t_r = (P_R.trans() * U_R / h_r)[0][0];
+                    A -= (Q_R - t_r * U_R) * U_R.trans() + U_R * P_R.trans();
                     U_R.mat_data = nullptr;
 
                     // 消除上三角阵R主对角线以下元素的截断误差
@@ -1376,7 +1577,7 @@ namespace mat
     // 计算二阶矩阵特征值,形参按行输入
     std::vector<std::complex<double>> Matrix::eigVal22(double a, double b, double c, double d)const
     {
-        double num = (a + d)*(a + d) - 4 * (a*d - b * c);
+        double num = (a + d) * (a + d) - 4 * (a * d - b * c);
         std::vector<std::complex<double>> vec;
         if (num < 0)
         {
@@ -1396,7 +1597,7 @@ namespace mat
     }
 
     // QR方法计算特征值时的矩阵迭代
-    Matrix& Matrix::iterM(Matrix& A)const
+    Matrix& Matrix::iterM(Matrix & A)const
     {
         usize m = A.row;
         if (m < 2)
@@ -1469,7 +1670,7 @@ namespace mat
                 P_R = A.trans() * U_R / h_r;
                 Q_R = A * U_R / h_r;
                 t_r = (P_R.trans() * U_R / h_r).mat_data[0];
-                A -= (Q_R - t_r * U_R)*U_R.trans() + U_R * P_R.trans();
+                A -= (Q_R - t_r * U_R) * U_R.trans() + U_R * P_R.trans();
                 U_R.mat_data = nullptr;
             }
         }

@@ -117,6 +117,10 @@ int main()
     //// 生成对角阵
     //print(diag(B2));
 
+    Matrix E = { {1,2,2,2},{2,4,6,8},{3,6,8,10} };
+
+    print(E.kernel());
+
     system("pause");
     return 0;
 }

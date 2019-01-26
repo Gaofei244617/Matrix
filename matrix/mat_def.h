@@ -43,12 +43,12 @@ namespace mat
         Matrix& operator/=(const double& num);                                     // M /= num
 
         // 下标索引
-        double *const operator[](const usize& n)noexcept
+        double* const operator[](const usize& n)noexcept
         {
             return mat_data + n * column;
         }
         // 常量矩阵禁止修改元素
-        const double *const operator[](const usize& n)const noexcept
+        const double* const operator[](const usize& n)const noexcept
         {
             return mat_data + n * column;
         }
@@ -69,19 +69,20 @@ namespace mat
         Matrix rbind(const Matrix& M)const;                                        // [M1; M2; ...], 需要列数相等
         Matrix cbind(const Matrix& M)const;                                        // [M1, M2, ...], 需要行数相等
         template<class T, class ...Args>
-        Matrix rbind(const T& M, const Args&... args)const;                        // [M1, M2, ...], 需要行数相等
+        Matrix rbind(const T& M, const Args& ... args)const;                        // [M1, M2, ...], 需要行数相等
         template<class T, class ...Args>
-        Matrix cbind(const T& M, const Args&... args)const;                        // [M1, M2, ...], 需要行数相等
+        Matrix cbind(const T& M, const Args& ... args)const;                        // [M1, M2, ...], 需要行数相等
         Matrix subMat(usize r1, usize c1, usize r2, usize c2)const;                // 子阵
 
         Matrix trans()const;                                                       // 矩阵转置
         usize rank()const;                                                         // 矩阵的秩
         double trace()const;                                                       // 矩阵的迹
+        Matrix rref()const;                                                        // 简化的行阶梯形矩阵（Gauss-Jordan 消元法）
         Matrix inv()const;                                                         // 逆矩阵
         Matrix kernel()const;                                                      // 矩阵的核(零空间)
         double det()const;                                                         // 矩阵行列式
-        double normOne()const;                                                     // 1范数,列和范数(每一列元素绝对值之和的最大值)
-        double normTwo()const;                                                     // 2范数,谱范数(AA'的最大特征值的平方根)
+        double normOne()const;                                                     // 1-范数,列和范数(每一列元素绝对值之和的最大值)
+        double normTwo()const;                                                     // 2-范数,谱范数(AA'的最大特征值的平方根)
         double normInf()const;                                                     // 无穷范数,行和范数(每一行元素绝对值之和的最大值)
         double cond(const std::string str = std::string("two"))const;              // 矩阵条件数(矩阵范数与逆矩阵范数的乘积,默认二范数)
         std::pair<Matrix, Matrix> QR()const;                                       // 矩阵QR分解
@@ -111,12 +112,16 @@ namespace mat
         // QR方法计算特征值中的矩阵迭代
         Matrix& iterM(Matrix& A)const;
 
+        //Gauss-Jordan消元法,返回{消元后的矩阵,行交换记录,秩}
+        std::tuple<Matrix, std::unique_ptr<usize[]>, usize> Gauss_Jordan_Elimination()const;
+
         // 全选主元高斯消去法
         // 返回值分别为：{消元后的矩阵，行交换记录，列交换记录，矩阵的秩，消元后的向量}
         static std::tuple<Matrix, std::unique_ptr<usize[]>, std::unique_ptr<usize[]>, usize, Matrix>
             gaussElimination(const Matrix& A, const Matrix& b = Matrix());
 
         /****************************************** Friend Functions ***************************************************************/
+        // 线性方程组
         friend std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b);
 
         // 加法运算
@@ -158,14 +163,14 @@ namespace mat
     /***************************************** 函数模板 ***************************************************************/
     // [M1, M2, ...], 需要行数相等
     template<class T, class ...Args>
-    Matrix Matrix::rbind(const T& M, const Args&... args)const
+    Matrix Matrix::rbind(const T& M, const Args& ... args)const
     {
         return this->rbind(M).rbind(args...);
     }
 
     // [M1, M2, ...], 需要行数相等
     template<class T, class ...Args>
-    Matrix Matrix::cbind(const T& M, const Args&... args)const
+    Matrix Matrix::cbind(const T& M, const Args& ... args)const
     {
         return this->cbind(M).cbind(args...);
     }

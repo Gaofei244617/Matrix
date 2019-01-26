@@ -38,6 +38,12 @@ namespace mat
         return mat.normInf();
     }
 
+    // 矩阵条件数(矩阵范数与逆矩阵范数的乘积,默认二范数)
+    double cond(const Matrix& mat, const std::string str)
+    {
+        return mat.cond(str);
+    }
+
     // 矩阵转置
     Matrix trans(const Matrix& mat)
     {
@@ -56,10 +62,22 @@ namespace mat
         return mat.trace();
     }
 
+    // 简化的行阶梯形矩阵（Gauss-Jordan 消元法）
+    Matrix rref(const Matrix& mat)
+    {
+        return mat.rref();
+    }
+
     // 逆矩阵
     Matrix inv(const Matrix& mat)
     {
         return mat.inv();
+    }
+
+    // 矩阵的核(零空间)
+    Matrix kernel(const Matrix& mat)
+    {
+        return mat.kernel();
     }
 
     // 矩阵行列式
@@ -150,7 +168,7 @@ namespace mat
     }
 
     // 随机矩阵, 元素取值[0, 1.0)
-    Matrix rand(const usize& m, const usize& n)
+    Matrix rand(const usize & m, const usize & n)
     {
         Matrix mat(m, n);
         for (usize i = 0; i < m; i++)
@@ -164,7 +182,7 @@ namespace mat
     }
 
     // 随机矩阵, 元素服从正态分布(均值u,方差t)
-    Matrix randn(const usize& m, const usize& n, const double u, const double t)
+    Matrix randn(const usize & m, const usize & n, const double u, const double t)
     {
         Matrix mat(m, n);
         for (usize i = 0; i < m; i++)
@@ -178,7 +196,7 @@ namespace mat
     }
 
     // 以向量为对角元素生成方阵
-    Matrix diag(const Matrix& vec)
+    Matrix diag(const Matrix & vec)
     {
         usize row = 0;
         usize column = 0;
@@ -211,9 +229,9 @@ namespace mat
     }
 
     // 求解线性方程组: Ax = b
-    std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b)
+    std::pair<Matrix, int> solve(const Matrix & A, const Matrix & b)
     {
-        /*******************************************************/
+        /**************************************************************************/
         // 求解线性方程组: Ax = b
         // A为系数矩阵，b为目标向量
         // 采用全选主元的高斯消元法求解方程组
@@ -221,13 +239,19 @@ namespace mat
         // (1)若方程有唯一解：   返回 pair(解向量x,  标志量0)
         // (2)若方程有无穷多解： 返回 pair(一个特解x, 标志量1)
         // (3)若方程无精确解：   返回 pair(近似解x*,  标志量2),  近似解x*使得|Ax* - b|最小
-        /********************************************************/
+        /***************************************************************************/
 
         // 判断系数矩阵的行数与目标向量的行数是否相等
         if (A.row != b.row)
         {
             throw std::length_error("Size of coefficient matrix and target vector does not match.");
             return std::make_pair(Matrix(), 2);
+        }
+
+        // 矩阵有无穷多解
+        if (A.row < A.column)
+        {
+            return std::make_pair(Matrix(), 1);
         }
 
         auto temp = Matrix::gaussElimination(A, b);                // 对系数矩阵进行全选主元的高斯消元
@@ -250,8 +274,14 @@ namespace mat
             // 方程的解向量
             // (1.1) rankA == N : 方程有唯一解
             // (1.2) rankA < N : 方程有无穷多解
-            const usize M = N - rankA + 1;  // 解向量的个数
-            Matrix x(N, M);
+
+            // 矩阵奇异,有无穷多解
+            if (rankA < N)
+            {
+                return std::make_pair(Matrix(), 1);
+            }
+
+            Matrix x(N, 1);
 
             // 求解高斯消元后的上三角方程组
             for (int i = rankA - 1; i >= 0; i--)
@@ -283,7 +313,7 @@ namespace mat
         if (rankA != rankAb)
         {
             Matrix AT(A.trans());
-            return std::make_pair(std::get<0>(solve(AT*A, AT*b)), 2);
+            return std::make_pair(std::get<0>(solve(AT * A, AT * b)), 2);
         }
 
         return std::make_pair(Matrix(), 2);

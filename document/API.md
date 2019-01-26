@@ -68,7 +68,9 @@ $$
 * `eye`
 * `ones`
 * `zeros`
+* `hilb`
 * `rand`
+* `randn`
 * `diag`
 * `subMat`
 

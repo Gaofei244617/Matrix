@@ -2,9 +2,9 @@
 \usepackage{amsmath}
 \usepackage{listings}
 \usepackage{geometry}
-%\usepackage{fontspec}
+\usepackage{fontspec}
 
-\geometry{a4paper,left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\geometry{a4paper,left=2.5cm,right=2cm,top=2.5cm,bottom=2.5cm}
 \CTEXsetup[format={\large\bfseries}]{section}
 
 \title{矩阵计算库API}
@@ -14,19 +14,19 @@
 \begin{document}
 \maketitle
 \newpage
+
 \tableofcontents
 \newpage
 
 \section{简介}
 
 \begin{itemize}
-    \item 该矩阵运算库包含矩阵的常用操作，如四则运算、求逆矩阵、求特征值、解线性方程组等。
-    \item 使用该矩阵库，C++编译器需支持C++11及以上标准。
+    \item 包含矩阵的常用操作，如四则运算、求逆矩阵、求特征值、解线性方程组等。
+    \item C++编译器需支持C++11及以上标准。
 \end{itemize}
 
 \section{矩阵构造}
-
-构造函数：
+\subsection{构造函数}
 {
     \setmainfont{Consolas}
     \begin{lstlisting}[language=C++]
@@ -38,14 +38,118 @@
     \end{lstlisting}
 }
 
-\section{常用构造}
+\subsection{Examples}
+{
+    \setmainfont{Consolas}
+    \begin{lstlisting}[language=C++]
+    Matrix A;
+    Matrix B(2,3);
+    Matrix C1({{1,2,3}});
+    Matrix C2({{1},{2},{3}});
+    Matrix D({1,2,3},{4,5,6});
+    Matrix E(D);
+    \end{lstlisting}
+}
+\textbf{Result:}
+{
+\small{
+$$
+A = (),
+\quad 
+B = \left(
+\begin{matrix}
+   0 & 0 & 0 \\
+   0 & 0 & 0
+  \end{matrix}
+\right),
+\quad
+C1 = \left(
+\begin{matrix}
+   1 & 2 & 3
+  \end{matrix}
+\right),
+\quad
+C2 = \left(
+\begin{matrix}
+   1 \\
+   2 \\
+   3
+  \end{matrix}
+\right),
+\quad
+D = \left(
+\begin{matrix}
+   1 & 2 & 3 \\
+   4 & 5 & 6
+  \end{matrix}
+\right),
+\quad
+E = \left(
+\begin{matrix}
+   1 & 2 & 3 \\
+   4 & 5 & 6
+  \end{matrix}
+\right)
+$$
+}
+}
+
+\section{常用矩阵}
+
+\begin{itemize}
+    \item \textbf{eye}
+    \item \textbf{ones}
+    \item \textbf{zeros}
+    \item \textbf{hilb}
+    \item \textbf{rand}
+    \item \textbf{randn}
+    \item \textbf{diag}
+    \item \textbf{subMat}
+\end{itemize}
 
 \section{元素索引}
+支持[]操作符和at()函数进行矩阵元素索引。
 
-\section{矩阵四则运算}
+\textbf{Example:}
+{
+    \setmainfont{Consolas}
+    \begin{lstlisting}[language=C++]
+    Matrix M({1,2,3},{4,5,6});
+    M[1][1] = 0;                // []操作符
+    M.at(0,2) = 0.5;            // at()函数
+    \end{lstlisting}
+}
+
+\textbf{Result：}$
+M = \left(
+\begin{matrix}
+   1 & 2 & 0.5 \\
+   4 & 0 & 6 
+  \end{matrix}
+\right)
+$\\
+
+\textbf{[]操作符与at()函数的区别：}[]操作符不进行下标越界检查，at()函数会进行下标检查，若下标越界则抛出\textbf{std::out\_of\_range}异常。
+
+\section{四则运算}
+
+\begin{itemize}
+    \item \textbf{赋值运算}
+    \item \textbf{加法}
+    \item \textbf{减法}
+    \item \textbf{乘法}
+    \item \textbf{除法}
+\end{itemize}
 
 \section{矩阵基本操作}
 
 \section{矩阵分解}
+
+\begin{itemize}
+    \item \textbf{QR分解}
+    \item \textbf{LU分解(Doolittle分解)}
+    \item \textbf{SVD分解}
+\end{itemize}
+
 
 \end{document}
