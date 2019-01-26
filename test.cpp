@@ -69,11 +69,11 @@ int main()
     //cout << "R = " << endl;
     //print(get<1>(QRVec));
 
-    //// LU分解
-    //cout << "LU Decomposition:" << endl;
-    //auto QRVec = LU(B);
-    //cout << "P = " << endl;
-    //print(get<0>(QRVec));
+    // LU分解
+    cout << "LU Decomposition:" << endl;
+    auto QRVec = LU(B);
+    cout << "P = " << endl;
+    print(get<0>(QRVec));
     //cout << "L = " << endl;
     //print(get<1>(QRVec));
     //cout << "U = " << endl;
@@ -117,9 +117,9 @@ int main()
     //// 生成对角阵
     //print(diag(B2));
 
-    Matrix E = { {1,2,2,2},{2,4,6,8},{3,6,8,10} };
-
-    print(E.kernel());
+    // 矩阵的核
+    //Matrix E = { {1,2,2,2},{2,4,6,8},{3,6,8,10} };
+    //print(E.kernel());
 
     system("pause");
     return 0;

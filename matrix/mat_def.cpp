@@ -799,10 +799,12 @@ namespace mat
         return std::make_pair(Matrix(), Matrix());
     }
 
-    /* 矩阵LU分解(Doolittle分解, A = LU), L为下三角阵(主对角元素为1), U为上三角矩阵 */
+    /* 矩阵LU分解(Doolittle分解, A = PLU, PA = LU), P为置换矩阵,L为下三角阵(主对角元素为1), U为上三角矩阵 */
     std::tuple<Matrix, Matrix, Matrix> Matrix::LU()const
     {
         /* 不要求矩阵满秩，亦不要求矩阵为方阵 */
+        /* 每次迭代根据行主元, 进行行交换, 置换矩阵P记录行交换过程 */
+        /* P为置换矩阵, P*P = I */
 
         // 如果是空矩阵
         if (this->row == 0 || this->column == 0)
@@ -835,7 +837,7 @@ namespace mat
         // 每一次循环可计算矩阵L第k行和矩阵U第k列元素, 结果(LU非零元素)暂存到矩阵A中
         for (usize k = 0; k < N; k++)
         {
-            // (1)全选主元
+            // (1)选行主元
             p_row = k;        // 记录主元所在的行
             s_max = 0;
             for (usize i = k; i < N; i++)
@@ -846,7 +848,7 @@ namespace mat
                     a = a - A[i][t] * A[t][k];
                 }
 
-                // 确定主元所在行和列
+                // 确定主元所在行
                 if (abs(a) > abs(s_max))
                 {
                     s_max = a;
@@ -857,7 +859,7 @@ namespace mat
                 }
             }
 
-            // (2)根据主元所在位置进行行交换和列交换
+            // (2)根据主元所在位置进行行交换和置换矩阵P列交换
             // 列交换后的置换矩阵P,作用在矩阵A上，等价于对A进行行交换
             A.swap_row(p_row, k);
             P.swap_col(p_row, k);
