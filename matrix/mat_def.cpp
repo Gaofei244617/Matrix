@@ -5,6 +5,7 @@
 #include <iostream>
 #include <algorithm>
 
+// debug
 #include <iostream>
 
 namespace mat
@@ -407,7 +408,7 @@ namespace mat
             Matrix vec(this->row, 1);
             for (usize i = 0; i < this->row; i++)
             {
-                vec[1][0] = mat_data[i * column + n];
+                vec[i][0] = mat_data[i * column + n];
             }
             return vec;
         }
@@ -832,7 +833,7 @@ namespace mat
         double s_max;                                   // 选主元的依据
         double a;
 
-        const double e = this->normOne() * (1.0e-10);   // 定义一个极小值
+        const double e = this->normOne() / TOL;   // 定义一个极小值
 
         // 每一次循环可计算矩阵L第k行和矩阵U第k列元素, 结果(LU非零元素)暂存到矩阵A中
         for (usize k = 0; k < N; k++)
@@ -940,17 +941,19 @@ namespace mat
 
         std::vector<std::complex<double>> vec;                     // 存储特征值的容器
         Matrix matrix(this->hess2());                              // 矩阵的拟上三角化
-        e == 0 ? e = this->normOne() / 1.0e10 : e = abs(e);        // 确定精度水平,默认为矩阵1范数的1/(1e10)
+        e == 0 ? e = this->normOne() / TOL : e = abs(e);        // 确定精度水平,默认为矩阵1范数的1/(1e12)
         int m = this->row;
 
         while (true)
         {
+            // 1X1矩阵
             if (m == 1)
             {
                 vec.emplace_back(matrix[0][0], 0);
                 break;
             }
 
+            // 实特征值
             if (abs(matrix[m - 1][m - 2]) < e)
             {
                 vec.emplace_back(matrix[m - 1][m - 1], 0);
@@ -958,6 +961,7 @@ namespace mat
             }
             else
             {
+                // 复特征值
                 if (m == 2 || abs(matrix[m - 2][m - 3]) < e)
                 {
                     auto val = eigVal22(matrix[m - 2][m - 2], matrix[m - 2][m - 1], matrix[m - 1][m - 2], matrix[m - 1][m - 1]);
@@ -983,6 +987,42 @@ namespace mat
         auto f = [](std::complex<double> a, std::complex<double> b) {return norm(a) > norm(b); };
         std::sort(vec.begin(), vec.end(), f);
         return vec;
+    }
+
+    // 矩阵特征值和特征向量
+    std::vector<std::pair<std::complex<double>, Matrix>> Matrix::eig(double e)const
+    {
+        // 截断误差
+        e == 0 ? e = this->normOne() / TOL : e = abs(e);        // 确定精度水平,默认为矩阵1范数的1/(1e12)
+        // 求特征值
+        auto eig_vals = this->eigVal(e);
+        // 返回值
+        std::vector<std::pair<std::complex<double>, Matrix>> res;
+        // 特征向量
+        for (usize i = 0; i < eig_vals.size(); i++)
+        {
+            // 实特征值
+            if (abs(eig_vals[i].imag()) <= e)
+            {
+                // 求特征向量
+                Matrix M = (*this - eig_vals[i].real() * eye(this->row, this->column)).kernel();
+                // 特征向量个数
+                usize count = std::get<1>(M.size());
+
+                for (usize k = 0; k < count; k++)
+                {
+                    res.emplace_back(eig_vals[i + k], M.getColumn(k));
+                }
+                i = i + count - 1;
+            }
+            else
+            {
+                // 复特征值返回空特征向量
+                res.emplace_back(eig_vals[i], Matrix());
+            }
+        }
+
+        return res;
     }
 
     // 简化的行阶梯形矩阵（Gauss-Jordan 消元法）
@@ -1184,6 +1224,28 @@ namespace mat
             ker.swap_row(i, rec[i]);
         }
 
+        // 列向量归一化
+        usize ROW;
+        usize COL;
+        std::tie(ROW, COL) = ker.size();
+        double temp = 0;
+        for (usize j = 0; j < COL; j++)
+        {
+            temp = 0;
+            for (usize i = 0; i < ROW; i++)
+            {
+                temp = temp + ker[i][j] * ker[i][j];
+            }
+            temp = sqrt(temp);
+            if (temp != 0)
+            {
+                for (usize i = 0; i < ROW; i++)
+                {
+                    ker[i][j] = ker[i][j] / temp;
+                }
+            }
+        }
+
         return ker;
     }
 
@@ -1278,7 +1340,7 @@ namespace mat
         // A的行交换对应于b的行交换
         // A的列交换对应于x的行交换
 
-        const double e = this->normOne() / 1.0e16;  // 截断误差
+        const double e = this->normOne() / TOL;  // 截断误差
 
         const usize ROW = this->row;
         const usize COL = this->column;
@@ -1319,9 +1381,14 @@ namespace mat
                         r = t;
                     }
                 }
+                // 主元为0
                 if (abs(temp) < e)
                 {
-                    temp = 0;
+                    // 小于误差的元素设为0
+                    for (usize t = i; t < ROW; t++)
+                    {
+                        MAT[t][j] = 0;
+                    }
                     j++;
                 }
                 else

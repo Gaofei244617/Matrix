@@ -10,22 +10,6 @@
 using namespace std;
 using namespace mat;
 
-// 输出矩阵
-void print(const Matrix& m)
-{
-    int r = std::get<0>(m.size());
-    int c = std::get<1>(m.size());
-    for (int i = 0; i < r; i++)
-    {
-        for (int j = 0; j < c; j++)
-        {
-            cout << m[i][j] << "\t";
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
-
 int main()
 {
     // 5X5矩阵, rank = 5
@@ -69,11 +53,11 @@ int main()
     //cout << "R = " << endl;
     //print(get<1>(QRVec));
 
-    // LU分解
-    cout << "LU Decomposition:" << endl;
-    auto QRVec = LU(B);
-    cout << "P = " << endl;
-    print(get<0>(QRVec));
+    //// LU分解
+    //cout << "LU Decomposition:" << endl;
+    //auto QRVec = LU(B);
+    //cout << "P = " << endl;
+    //print(get<0>(QRVec));
     //cout << "L = " << endl;
     //print(get<1>(QRVec));
     //cout << "U = " << endl;
@@ -92,18 +76,15 @@ int main()
     //auto val = eigVal(A);
     //for (auto& v : val) { cout << v << endl; }
 
-    //// 特征值和特征向量
-    //cout << "矩阵A的特征值：" << endl;
-    //auto val = A.eig();
-    //for (auto& v : val)
-    //{
-    //    cout << "特征值：" << get<0>(v) << ",  特征向量：";
-    //    for (int i = 0; i < get<0>(get<1>(v).size()); i++)
-    //    {
-    //        cout << get<1>(v)[i][0] << "  ";
-    //    }
-    //    cout << endl;
-    //}
+    // 特征值和特征向量
+    cout << "矩阵A的特征值：" << endl;
+    auto val = eig(A);
+    for (auto& v : val)
+    {
+        cout << "特征值：" << get<0>(v) << endl;
+        cout << "特征向量：" << endl;
+        print(get<1>(v));
+    }
 
     //// 矩阵拼接
     //print(A);

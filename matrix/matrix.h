@@ -24,7 +24,7 @@ namespace mat
     std::tuple<Matrix, Matrix, Matrix> LU(const Matrix& mat);                              // 矩阵LU分解,返回值{P,L,U}
     std::tuple<Matrix, Matrix, Matrix> SVD(const Matrix& mat);                             // 奇异值分解，返回S、V、D三个矩阵
     std::vector<std::complex<double>> eigVal(const Matrix& mat, double e = 0);             // 矩阵特征值
-    std::vector<std::pair<std::complex<double>, Matrix>> eig(const Matrix& mat, double e = 0);   // 矩阵特征值
+    std::vector<std::pair<std::complex<double>, Matrix>> eig(const Matrix& mat, double e = 0);   // 矩阵特征值和特征向量
 
     Matrix eye(const usize& m, const usize& n);                                            // 单位矩阵
     Matrix ones(const usize& m, const usize& n);                                           // 元素全为1的矩阵
@@ -43,6 +43,8 @@ namespace mat
     Matrix map(const Matrix& mat, std::function<double(double)> f);                        // 高阶函数-map
 
     std::pair<Matrix, int> solve(const Matrix& A, const Matrix& b);                        // 求解线性方程组 Ax = b
+
+    void print(const Matrix& m);                                                            // 输出矩阵
 
     /******************************************** 函数模板 ****************************************************************/
     // [M1; M2; ...], 需要列数相等

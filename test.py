@@ -45,16 +45,18 @@ b = np.array([[1.0], [2.0], [3.0], [4.0], [5.0]])
 
 # print(np.linalg.solve(A, b))           # 线性方程组
 
-# val, vec = np.linalg.eig(A)            # 特征值和特征向量
-# print(val)
-# print(vec)
+val, vec = np.linalg.eig(A)            # 特征值和特征向量
+print('特征值：')
+print(val)
+print('特征向量：')
+print(vec)
 
 # Q, R = np.linalg.qr(A)                  # QR分解
 # print(Q)
 # print(R)
 
-P, L, U = linalg.lu(B)               # LU分解
-print(P)
-print(L)
-print(U)
-print(np.matmul(L, U))
+# P, L, U = linalg.lu(B)               # LU分解
+# print(P)
+# print(L)
+# print(U)
+# print(np.matmul(L, U))

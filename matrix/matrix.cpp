@@ -1,4 +1,5 @@
 ﻿#include "matrix.h"
+#include "iostream"
 
 namespace mat
 {
@@ -102,6 +103,12 @@ namespace mat
     std::vector<std::complex<double>> eigVal(const Matrix& mat, double e)
     {
         return mat.eigVal(e);
+    }
+
+    // 矩阵特征值和特征向量
+    std::vector<std::pair<std::complex<double>, Matrix>> eig(const Matrix& mat, double e)
+    {
+        return mat.eig(e);
     }
 
     // 子阵
@@ -237,7 +244,7 @@ namespace mat
         // 采用全选主元的高斯消元法求解方程组
 
         // (1)若方程有唯一解：   返回 pair(解向量x,  标志量0)
-        // (2)若方程有无穷多解： 返回 pair(一个特解x, 标志量1)
+        // (2)若方程有无穷多解： 返回 pair(空矩阵, 标志量1)
         // (3)若方程无精确解：   返回 pair(近似解x*,  标志量2),  近似解x*使得|Ax* - b|最小
         /***************************************************************************/
 
@@ -317,5 +324,28 @@ namespace mat
         }
 
         return std::make_pair(Matrix(), 2);
+    }
+
+    // 输出矩阵
+    void print(const Matrix & m)
+    {
+        int r = std::get<0>(m.size());
+        int c = std::get<1>(m.size());
+
+        // 空矩阵
+        if (r == 0 || c == 0)
+        {
+            std::cout << "(null)" << std::endl;
+        }
+
+        for (int i = 0; i < r; i++)
+        {
+            for (int j = 0; j < c; j++)
+            {
+                std::cout << m[i][j] << "\t";
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
     }
 }
